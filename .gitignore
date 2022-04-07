@@ -2,5 +2,5 @@ MusiCraze/build/
 MusiCraze/*.classpath
 MusiCraze/src/main/java/musicraze/dal/ConnectionManager.java
 
-MusiCraze/src/.metadata/
-MusiCraze/src/.settings/
+MusiCraze/.metadata/
+MusiCraze/.settings/
