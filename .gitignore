@@ -1,0 +1,3 @@
+MusiCraze/build/
+MusiCraze/*.classpath
+MusiCraze/src/main/java/musicraze/dal/ConnectionManager.java
