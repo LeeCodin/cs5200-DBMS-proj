@@ -43,6 +43,9 @@ public class UserProfile extends HttpServlet {
 	}
     req.setAttribute("playlists", playlists);
     
+//	Map<String, String> messages = new HashMap<String, String>();
+//    req.setAttribute("messages", messages);
+//    messages.put("disableMessage", "true");
     
     req.getRequestDispatcher("/UserProfile.jsp").forward(req, res);
   }
@@ -51,6 +54,7 @@ public class UserProfile extends HttpServlet {
   public void doPost(HttpServletRequest req, HttpServletResponse res)
       throws ServletException, IOException {
 	  
+	  // Delete user's playlist
 	  Map<String, String> messages = new HashMap<String, String>();
       req.setAttribute("messages", messages);
 
@@ -62,14 +66,17 @@ public class UserProfile extends HttpServlet {
 		playlist = playlistsDao.delete(playlist);
 		
 		if (playlist == null) {
-			messages.put("title", "Successfully deleted playlist:" + playlistId);
+			messages.put("title", "Successfully deleted playlist#" +  playlistId);
+			messages.put("isSuccessful", "true");
+  			messages.put("disableMessage", "false");
 		} else {
-			messages.put("title", "Failed to delete" + playlistId);
+			messages.put("title", "Failed to delete playlist#" + playlistId);
+			messages.put("isSuccessful", "false");
+  			messages.put("disableMessage", "false");
 		}
       } catch (SQLException e) {
-		// TODO Auto-generated catch block
 		e.printStackTrace();
-		messages.put("title", "Failed to delete " + playlistId);
+		messages.put("title", "Failed to delete playlist#" + playlistId);
       }
       
 	  
