@@ -24,10 +24,12 @@ import javax.servlet.http.HttpServletResponse;
 public class SongGet extends HttpServlet {
 	
 	protected SongsDao songsDao;
+	protected CommentsDao commentsDao;
 	
 	@Override
 	public void init() throws ServletException {
 		songsDao = SongsDao.getInstance();
+		commentsDao = CommentsDao.getInstance();
 	}
 	
 	@Override
@@ -37,17 +39,19 @@ public class SongGet extends HttpServlet {
         Map<String, String> messages = new HashMap<String, String>();
         req.setAttribute("messages", messages);
         Songs song = null;
+        List<Comments> comments = new ArrayList<>();
         
         // Retrieve and validate name.
         // firstname is retrieved from the URL query string.
         String songId = req.getParameter("songId");
-        System.out.println(songId);
+        System.out.println(songId + "123");
         if (songId == null || songId.trim().isEmpty()) {
             messages.put("success", "Song Id does not exist.");
         } else {
         	// Retrieve users, and store as a message.
         	try {
             	song = songsDao.getSongById(Integer.valueOf(songId));
+             	comments = commentsDao.getCommentsBySongId(Integer.valueOf(songId));
             } catch (SQLException e) {
     			e.printStackTrace();
     			throw new IOException(e);
@@ -58,7 +62,7 @@ public class SongGet extends HttpServlet {
         	//messages.put("previousFirstName", firstName);
         }
         req.setAttribute("songInfo", song);
-        
+        req.setAttribute("commentsInfo", comments);
         req.getRequestDispatcher("/SongDetail.jsp").forward(req, resp);
 	}
 	

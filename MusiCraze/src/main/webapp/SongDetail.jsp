@@ -10,6 +10,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Song Detail</title>
 <link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 <script src="js/bootstrap.min.js"></script>
 </head>
 <body>
@@ -36,29 +37,26 @@
 			</tr>
 		</tbody>
 	</table>
-	<br/>
-	<!--  
-	<div id="userCreate"><a href="usercreate">Create User</a></div>
-	<br/>
-	<h1>Matching Users</h1>
-        <table border="1">
-            <tr>
-                <th>UserName</th>
-                <th>FirstName</th>
-                <th>LastName</th>
-                <th>BornDate</th>
-             
-            </tr>
-            <c:forEach items="${users}" var="user" >
-                <tr>
-                    <td><c:out value="${user.getUserName()}" /></td>
-                    <td><c:out value="${user.getFirstName()}" /></td>
-                    <td><c:out value="${user.getLastName()}" /></td>
-                    <td><fmt:formatDate value="${user.getBornDate()}" pattern="yyyy-MM-dd"/></td>
-           
-                </tr>
-            </c:forEach>
-       </table>
-       -->
+	
+	
+	<h1>Comments</h1>
+	<div class="d-flex flex-wrap">
+		<c:forEach items="${commentsInfo}" var="comment">
+				<div class="card" style="width: 18rem; margin-right:1rem;">
+				  	<div class="card-body">
+					    <h5 class="card-title">${comment.getUser().getUserName()}</h5>
+					    <h6 class="card-subtitle mb-2 text-muted">${comment.getCreatedAt()}</h6>
+					    <p class="card-text">${comment.getContent()}</p>
+					    <a href="#" class="card-link">Card link</a>
+					    <a href="#" class="card-link">Another link</a>
+				  	</div>
+				</div>
+		</c:forEach>
+	</div>
+	
+	
+	
+	
+
 </body>
 </html>
