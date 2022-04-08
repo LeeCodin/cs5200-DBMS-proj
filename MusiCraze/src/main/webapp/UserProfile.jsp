@@ -70,8 +70,20 @@
 		    <li class="list-group-item row col-6"><a href="http://localhost:8080/MusiCraze/UserLogout">Logout</a></li>	    
 		</ul>
 		
-		<h1>${messages.title}</h1>
-		<table class="table table-striped">
+		<div style="display:flex; flex-wrap: wrap;align-items:center;justify-content: space-around">
+			<h1 class="text-center">My Playlists</h1>
+			<a href="PlaylistCreate" class="btn btn-primary" role="button" aria-pressed="true" style="height:1.75rem;font-size:1.25rem;line-height:1rem">
+				+ Add New Playlist</a>	
+		</div>
+		<div
+			<c:if test="${messages.disableMessage==null || messages.disableMessage==true}">style="display:none"</c:if>
+			<c:if test="${messages.isSuccessful}">class="alert alert-success"</c:if>
+			<c:if test="${!(messages.isSuccessful)}">class="alert alert-danger"</c:if>
+		>
+			<c:out value="${messages.title}"/>
+		</div>
+		
+		<table class="table table-striped table-hover">
 		  <thead class="thead-dark">
 		    <tr>
 		      <th scope="col">Playlist Id</th>
@@ -79,8 +91,8 @@
 		      <th scope="col">Description </th>
 		      <th scope="col">Create Date</th>
 		      <th scope="col">Latest Update Date</th>
-		      <th scope="col"></th>
-		      <th scope="col"></th>
+<!-- 		      <th scope="col"></th>
+ -->		      <th scope="col"></th>
 		      
 		    </tr>
 		  </thead>
@@ -90,18 +102,18 @@
 		        <!-- <th scope="row">2</th> -->
 		        <th scope="row"><c:out value="${playlist.getPlaylistId()}" /></th>
 		    	<%-- <td><c:out value="${playlist.getPlaylistId()}" /></td> --%>
-		    	<td><c:out value="${playlist.getPlaylistName()}" /></td>
+		    	<td><a href="PlaylistSongsDisplay?playlistId=<c:out value="${playlist.getPlaylistId()}"/>"><c:out value="${playlist.getPlaylistName()}" /></a></td>
 		    	<td><c:out value="${playlist.getDescription()}" /></td>
 		    	<td><c:out value="${playlist.getCreatedAt()}" /></td>
 		    	<td><c:out value="${playlist.getUpdatedAt()}" /></td>
 		    	
-		    	<td><a href="playlistupdate?playlistid=<c:out value="${playlist.getPlaylistId()}"/>">Update</a></td>
+<%-- 		    	<td><a href="PlaylistUpdate?playlistId=<c:out value="${playlist.getPlaylistId()}"/>">Update</a></td>
+ --%>		    	
 		    	<td>
 		    		<form action="UserProfile" method="post">
 		    		  <span style="display: none">
 		    		  	<input name="playlistId" value="${playlist.getPlaylistId()}"/>
 		    		  </span>
-		    		  
 		    		  <input class="delete" type="submit" value="Delete" />
 		    		 
 		    		</form>
