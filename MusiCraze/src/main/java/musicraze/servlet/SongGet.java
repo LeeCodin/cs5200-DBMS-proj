@@ -38,8 +38,10 @@ public class SongGet extends HttpServlet {
 		// Map for storing messages.
         Map<String, String> messages = new HashMap<String, String>();
         req.setAttribute("messages", messages);
+        Users user = (Users) req.getSession().getAttribute("user");
         Songs song = null;
         List<Comments> comments = new ArrayList<>();
+        List<Comments> usersComments = new ArrayList<>();
         
         // Retrieve and validate name.
         // firstname is retrieved from the URL query string.
@@ -52,6 +54,13 @@ public class SongGet extends HttpServlet {
         	try {
             	song = songsDao.getSongById(Integer.valueOf(songId));
              	comments = commentsDao.getCommentsBySongId(Integer.valueOf(songId));
+
+                 // Check and add this user's comments
+                 for(Comments comment: comments) {
+                    if(comment.getUser().getUserName().equals(user.getUserName())) {
+                        usersComments.add(comment);
+                    }
+                }
             } catch (SQLException e) {
     			e.printStackTrace();
     			throw new IOException(e);
@@ -63,6 +72,7 @@ public class SongGet extends HttpServlet {
         }
         req.setAttribute("songInfo", song);
         req.setAttribute("commentsInfo", comments);
+        req.setAttribute("usersComments", usersComments);
         req.getRequestDispatcher("/SongDetail.jsp").forward(req, resp);
 	}
 	
