@@ -5,10 +5,7 @@ import musicraze.model.*;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.annotation.*;
 import javax.servlet.ServletException;
@@ -54,6 +51,13 @@ public class SongGet extends HttpServlet {
         	try {
             	song = songsDao.getSongById(Integer.valueOf(songId));
              	comments = commentsDao.getCommentsBySongId(Integer.valueOf(songId));
+                 // Sort comments by their dates.
+                Collections.sort(comments, new Comparator<Comments>() {
+                    @Override
+                    public int compare(Comments o1, Comments o2) {
+                        return o2.getCreatedAt().compareTo(o1.getCreatedAt());
+                    }
+                });
 
                  // Check and add this user's comments
                  for(Comments comment: comments) {
@@ -82,6 +86,7 @@ public class SongGet extends HttpServlet {
         // Map for storing messages.
         Map<String, String> messages = new HashMap<String, String>();
         req.setAttribute("messages", messages);
+        
 
         //List<Users> users = new ArrayList<Users>();
         Songs song = null;

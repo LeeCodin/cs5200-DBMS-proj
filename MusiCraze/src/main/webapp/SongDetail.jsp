@@ -41,16 +41,24 @@
 	
 	<!-- Comments -->
 	<h1>Comments</h1>
+	<h3>You can create a comment for this song:</h3>
+		<form method="post" >
+		  <div class="mb-3">
+		    <textarea type="text" name="add-comment" class="form-control w-25" id="exampleInputPassword1"></textarea>
+		  </div>
+		  <button type="submit"  class="btn btn-primary">Submit</button>
+		</form>
 	
+	<br />
 	<c:if test="${usersComments.size() != 0}"> 
 		<h3>You Got Some Comments on this song:</h3>
 		<c:forEach items="${usersComments}" var="comment">
-				<div class="card" style="width: 18rem; margin-right:1rem; margin-left:1rem;">
-				  	<div class="card-body">
-					    <h5 class="card-title">${comment.getUser().getUserName()}</h5>
-					    <h6 class="card-subtitle mb-2 text-muted">${comment.getCreatedAt()}</h6>
-					    <p class="card-text">${comment.getContent()}</p>
-			
+				<div class="card text-white bg-success" style="width: 18rem; margin-right:1rem; margin-left:1rem;">
+					 <div class="card-header">
+					  	${comment.getCreatedAt()}
+					 </div>
+				 	<div class="card-body">
+					    <p class="card-text">${comment.getContent()}</p>		
 				  	</div>
 				</div>
 		</c:forEach>
@@ -62,10 +70,12 @@
 	<h3>All Comments:</h3>
 	<div class="d-flex flex-wrap">
 		<c:forEach items="${commentsInfo}" var="comment">
-				<div class="card" style="width: 18rem; margin-right:1rem; margin-left:1rem;">
+				<div class="card bg-light" style="width: 18rem; margin-right:1rem; margin-left:1rem;">
+				  	<div class="card-header">
+				  	${comment.getCreatedAt()}
+					 </div>
 				  	<div class="card-body">
-					    <h5 class="card-title">${comment.getUser().getUserName()}</h5>
-					    <h6 class="card-subtitle mb-2 text-muted">${comment.getCreatedAt()}</h6>
+						<h6 class="card-subtitle" style="margin-bottom: 1rem;">   ${comment.getUser().getUserName()} said: </h6>
 					    <p class="card-text">${comment.getContent()}</p>
 					   <!--  <a href="#" class="card-link">Card link</a>
 					    <a href="#" class="card-link">Another link</a> -->
