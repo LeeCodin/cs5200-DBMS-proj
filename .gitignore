@@ -2,7 +2,7 @@ MusiCraze/build/
 MusiCraze/*.classpath
 MusiCraze/src/main/java/musicraze/dal/ConnectionManager.java
 
-MusiCraze/.DS_Store
+MusiCraze/*.DS_Store
 *.DS_Store
 
 MusiCraze/.metadata/
