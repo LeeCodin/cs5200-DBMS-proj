@@ -91,7 +91,8 @@ public class SongGet extends HttpServlet {
         String songId = req.getParameter("songId");
         req.setAttribute("messages", messages);
         
-        // Create new comment.
+        // Create New Comment.
+
         String comment = req.getParameter("add-comment");
         if(comment != null && comment.length() > 0) {
         	  System.out.println("new comment" + comment);
@@ -103,21 +104,34 @@ public class SongGet extends HttpServlet {
                 e.printStackTrace();
                 throw new IOException(e);
             }
-
         }
         
-        // Delete comment.
+        // Update Comment
+        String commentId = req.getParameter("comment-id");
+        System.out.println("comment id = " + commentId);
+        String updateComment = req.getParameter("update-comment");
+        if(updateComment != null && updateComment.length() > 0) {
+        	 System.out.println("updated comment: " + updateComment);
+        	 try {
+ 				Comments updatedComment = commentsDao.updateContentByCommentId(Integer.valueOf(commentId), updateComment);
+ 			} catch (NumberFormatException | SQLException e) {
+ 				e.printStackTrace();
+ 				throw new IOException(e);
+ 			}
+        }
+        
+        // Delete Comment.
         String deleteComment = req.getParameter("deleteComment");
         if(deleteComment != null && deleteComment.length() > 0) {
         	  System.out.println("delted comment: " + deleteComment);
         	  try {
 				commentsDao.deleteByCommentId(Integer.valueOf(deleteComment));
-				
 			} catch (NumberFormatException | SQLException e) {
 				e.printStackTrace();
 				throw new IOException(e);
 			}
         }
+        
 
         //List<Users> users = new ArrayList<Users>();
         Songs song = null;
@@ -137,9 +151,10 @@ public class SongGet extends HttpServlet {
             }
         	messages.put("success", "Displaying songs with title " + songTitle);
         }
-        
+       
         req.setAttribute("users", song);
        
+        // Redirect to the same page
         resp.sendRedirect(req.getContextPath() + "/SongDetail?songId=" + songId);
  
     }

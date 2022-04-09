@@ -263,6 +263,40 @@ public class CommentsDao {
 
 
     /**
+     * Update the content of the comment
+     * @param id
+     * @param newContent
+     * @return
+     * @throws SQLException
+     */
+    public Comments updateContentByCommentId(int id, String newContent) throws SQLException {
+        Connection connection = null;
+        PreparedStatement updateStmt = null;
+        try {
+            connection = this.connectionManager.getConnection();
+            updateStmt = connection.prepareStatement(UPDATE);
+            updateStmt.setString(1, newContent);
+            updateStmt.setInt(2, id);
+            updateStmt.executeUpdate();
+
+            Comments comment = instance.getCommentByCommentId(id);
+            comment.setContent(newContent);
+            return comment;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            if (connection != null) {
+                connection.close();
+            }
+            if (updateStmt != null) {
+                updateStmt.close();
+            }
+        }
+    }
+
+
+    /**
      * Delete this comment
      * @param comment
      * @return
