@@ -22,7 +22,10 @@ public class SongGet extends HttpServlet {
 	
 	protected SongsDao songsDao;
 	protected CommentsDao commentsDao;
-	
+	protected Users user;
+    protected Songs song;
+    protected List<Comments> comments;
+    protected List<Comments> usersComments;
 	@Override
 	public void init() throws ServletException {
 		songsDao = SongsDao.getInstance();
@@ -35,10 +38,10 @@ public class SongGet extends HttpServlet {
 		// Map for storing messages.
         Map<String, String> messages = new HashMap<String, String>();
         req.setAttribute("messages", messages);
-        Users user = (Users) req.getSession().getAttribute("user");
-        Songs song = null;
-        List<Comments> comments = new ArrayList<>();
-        List<Comments> usersComments = new ArrayList<>();
+        user = (Users) req.getSession().getAttribute("user");
+        song = null;
+        comments = new ArrayList<>();
+        usersComments = new ArrayList<>();
         
         // Retrieve and validate name.
         // firstname is retrieved from the URL query string.
@@ -85,8 +88,36 @@ public class SongGet extends HttpServlet {
     		throws ServletException, IOException {
         // Map for storing messages.
         Map<String, String> messages = new HashMap<String, String>();
+        String songId = req.getParameter("songId");
         req.setAttribute("messages", messages);
         
+        // Create new comment.
+        String comment = req.getParameter("add-comment");
+        if(comment != null && comment.length() > 0) {
+        	  System.out.println("new comment" + comment);
+              String content = comment;
+              Date createdAt = new Date();
+            try {
+                Comments newComment = commentsDao.create(new Comments(user, song, content, createdAt));
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw new IOException(e);
+            }
+
+        }
+        
+        // Delete comment.
+        String deleteComment = req.getParameter("deleteComment");
+        if(deleteComment != null && deleteComment.length() > 0) {
+        	  System.out.println("delted comment: " + deleteComment);
+        	  try {
+				commentsDao.deleteByCommentId(Integer.valueOf(deleteComment));
+				
+			} catch (NumberFormatException | SQLException e) {
+				e.printStackTrace();
+				throw new IOException(e);
+			}
+        }
 
         //List<Users> users = new ArrayList<Users>();
         Songs song = null;
@@ -106,8 +137,10 @@ public class SongGet extends HttpServlet {
             }
         	messages.put("success", "Displaying songs with title " + songTitle);
         }
-        req.setAttribute("users", song);
         
-        req.getRequestDispatcher("/SongDetail.jsp").forward(req, resp);
+        req.setAttribute("users", song);
+       
+        resp.sendRedirect(req.getContextPath() + "/SongDetail?songId=" + songId);
+ 
     }
 }

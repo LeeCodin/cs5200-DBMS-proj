@@ -289,5 +289,33 @@ public class CommentsDao {
             }
         }
     }
+    
+    /**
+     * Delete this comment
+     * @param comment
+     * @return
+     * @throws SQLException
+     */
+    public Comments deleteByCommentId(int id) throws SQLException {
+        Connection connection = null;
+        PreparedStatement deleteStmt = null;
+        try {
+            connection = this.connectionManager.getConnection();
+            deleteStmt = connection.prepareStatement(DELETE);
+            deleteStmt.setInt(1, id);
+            deleteStmt.executeUpdate();
+            return null;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            if (connection != null) {
+                connection.close();
+            }
+            if (deleteStmt != null) {
+                deleteStmt.close();
+            }
+        }
+    }
 
 }

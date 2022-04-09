@@ -51,17 +51,31 @@
 	
 	<br />
 	<c:if test="${usersComments.size() != 0}"> 
-		<h3>You Got Some Comments on this song:</h3>
-		<c:forEach items="${usersComments}" var="comment">
-				<div class="card text-white bg-success" style="width: 18rem; margin-right:1rem; margin-left:1rem;">
-					 <div class="card-header">
-					  	${comment.getCreatedAt()}
-					 </div>
-				 	<div class="card-body">
-					    <p class="card-text">${comment.getContent()}</p>		
-				  	</div>
-				</div>
-		</c:forEach>
+		<h3>You have some comments on this song:</h3>
+		<div class="d-flex flex-wrap">
+			<c:forEach items="${usersComments}" var="comment">
+					<div class="card text-white bg-success" style="width: 18rem; margin: 0 1rem 1rem 0.5rem;">
+						 <div class="card-header">
+						  	${comment.getCreatedAt()}
+						 </div>
+					 	<div class="card-body">
+						    <p class="card-text">${comment.getContent()}</p>		
+							
+							<div class="d-flex justify-content-between">
+								<button  class="btn btn-warning">Update</button>
+								<div style="right: 1rem;">
+									<form method="post">
+										<input type="hidden" name="deleteComment" value="${comment.getCommentId()}"/>
+										<button  class="btn btn-danger">Delete</button>
+									</form>
+								</div>		
+							</div>
+					  	</div>
+					  
+					  
+					</div>
+			</c:forEach>
+		</div>
 	</c:if> 
 	
 	<br />
@@ -70,7 +84,7 @@
 	<h3>All Comments:</h3>
 	<div class="d-flex flex-wrap">
 		<c:forEach items="${commentsInfo}" var="comment">
-				<div class="card bg-light" style="width: 18rem; margin-right:1rem; margin-left:1rem;">
+				<div class="card bg-light" style="width: 18rem; margin: 0 1rem 1rem 0.5rem;">
 				  	<div class="card-header">
 				  	${comment.getCreatedAt()}
 					 </div>
