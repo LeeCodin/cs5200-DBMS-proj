@@ -28,6 +28,7 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
             <th scope="col">Album</th>
             <th scope="col">Year</th>
             <th scope="col">Release Date</th>
+            <th scope="col" style="width:8rem;">Likes</th>
           </tr>
         </thead>
         <tbody>
@@ -38,6 +39,28 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
             <td>${songInfo.getAlbum().getName()}</td>
             <td>${songInfo.getAlbum().getYear()}</td>
             <td>${songInfo.getAlbum().getReleaseDate()}</td>
+            <td>
+            	<div class="d-flex">
+            		<div style="margin-right:1rem;">
+            		  	${likesCounts}
+            		</div>
+	            	<form method="post" id="like-song">
+	           			<input type="hidden" name="like-song" value="true"/>
+	            		 <a href="javascript:{}" onclick="document.getElementById('like-song').submit();">
+	            		 	<%boolean liked = (boolean)request.getAttribute("liked"); %>
+	            		 	<c:choose>
+	            		 		<c:when test="${not liked}">
+	            		 		like
+	            		 	</c:when>
+	            		 	<c:otherwise>
+	            		 		unlike
+	            		 	</c:otherwise>
+	            		 	</c:choose>
+	            		 
+						</a>
+	            	</form>
+            	</div>       
+            </td>
           </tr>
         </tbody>
       </table>

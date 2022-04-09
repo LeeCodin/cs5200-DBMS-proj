@@ -28,6 +28,10 @@ public class LikesDao {
     private static final String DELETE =
             "DELETE FROM Likes " +
                     "WHERE LikeId = ?;";
+    private static final String DELETE_BY_USER_SONG_ID =
+            "DELETE FROM Likes " +
+                    "WHERE UserName = ? AND SongId = ?;";
+
     private static LikesDao instance = null;
     protected  ConnectionManager connectionManager;
 
@@ -242,6 +246,37 @@ public class LikesDao {
             connection = this.connectionManager.getConnection();
             deleteStmt = connection.prepareStatement(DELETE);
             deleteStmt.setInt(1, likes.getLikeId());
+            deleteStmt.executeUpdate();
+            return null;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            if (connection != null) {
+                connection.close();
+            }
+            if (deleteStmt != null) {
+                deleteStmt.close();
+            }
+        }
+    }
+
+
+
+    /**
+     * Delete this like by the username and songId
+     * @param username, songId
+     * @return
+     * @throws SQLException
+     */
+    public Likes deleteLikeByUserNameAndSongId(String username, int songId) throws SQLException{
+        Connection connection = null;
+        PreparedStatement deleteStmt = null;
+        try {
+            connection = this.connectionManager.getConnection();
+            deleteStmt = connection.prepareStatement(DELETE_BY_USER_SONG_ID);
+            deleteStmt.setString(1, username);
+            deleteStmt.setInt(2, songId);
             deleteStmt.executeUpdate();
             return null;
         } catch (SQLException e) {

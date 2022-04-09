@@ -4,6 +4,7 @@ import musicraze.dal.*;
 import musicraze.model.*;
 
 import java.io.IOException;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -22,14 +23,19 @@ public class SongGet extends HttpServlet {
 	
 	protected SongsDao songsDao;
 	protected CommentsDao commentsDao;
+	protected LikesDao likesDao;
 	protected Users user;
     protected Songs song;
     protected List<Comments> comments;
     protected List<Comments> usersComments;
+    protected List<Likes> likes;
+    private boolean liked = false;
+
 	@Override
 	public void init() throws ServletException {
 		songsDao = SongsDao.getInstance();
 		commentsDao = CommentsDao.getInstance();
+		likesDao = LikesDao.getInstance();
 	}
 	
 	@Override
@@ -42,11 +48,12 @@ public class SongGet extends HttpServlet {
         song = null;
         comments = new ArrayList<>();
         usersComments = new ArrayList<>();
+        likes = new ArrayList<>();
         
         // Retrieve and validate name.
         // firstname is retrieved from the URL query string.
         String songId = req.getParameter("songId");
-        System.out.println(songId + "123");
+        System.out.println("songId: " + songId);
         if (songId == null || songId.trim().isEmpty()) {
             messages.put("success", "Song Id does not exist.");
         } else {
@@ -54,6 +61,7 @@ public class SongGet extends HttpServlet {
         	try {
             	song = songsDao.getSongById(Integer.valueOf(songId));
              	comments = commentsDao.getCommentsBySongId(Integer.valueOf(songId));
+             	likes = likesDao.getLikesBySongId(Integer.valueOf(songId));
                  // Sort comments by their dates.
                 Collections.sort(comments, new Comparator<Comments>() {
                     @Override
@@ -68,6 +76,18 @@ public class SongGet extends HttpServlet {
                         usersComments.add(comment);
                     }
                 }
+
+                 // Check whether the user likes this song or not
+                boolean flag = false;
+                for(Likes like: likes) {
+                    if(like.getUser().getUserName().equals(user.getUserName())) {
+                        flag = true;
+                        break;
+                    }
+                }
+                liked = flag;
+
+
             } catch (SQLException e) {
     			e.printStackTrace();
     			throw new IOException(e);
@@ -80,6 +100,8 @@ public class SongGet extends HttpServlet {
         req.setAttribute("songInfo", song);
         req.setAttribute("commentsInfo", comments);
         req.setAttribute("usersComments", usersComments);
+        req.setAttribute("likesCounts", likes.size());
+        req.setAttribute("liked", liked);
         req.getRequestDispatcher("/SongDetail.jsp").forward(req, resp);
 	}
 	
@@ -92,10 +114,9 @@ public class SongGet extends HttpServlet {
         req.setAttribute("messages", messages);
         
         // Create New Comment.
-
         String comment = req.getParameter("add-comment");
         if(comment != null && comment.length() > 0) {
-        	  System.out.println("new comment" + comment);
+        	  System.out.println("new comment: " + comment);
               String content = comment;
               Date createdAt = new Date();
             try {
@@ -108,7 +129,6 @@ public class SongGet extends HttpServlet {
         
         // Update Comment
         String commentId = req.getParameter("comment-id");
-        System.out.println("comment id = " + commentId);
         String updateComment = req.getParameter("update-comment");
         if(updateComment != null && updateComment.length() > 0) {
         	 System.out.println("updated comment: " + updateComment);
@@ -123,13 +143,36 @@ public class SongGet extends HttpServlet {
         // Delete Comment.
         String deleteComment = req.getParameter("deleteComment");
         if(deleteComment != null && deleteComment.length() > 0) {
-        	  System.out.println("delted comment: " + deleteComment);
+        	  System.out.println("deleted comment: " + deleteComment);
         	  try {
 				commentsDao.deleteByCommentId(Integer.valueOf(deleteComment));
 			} catch (NumberFormatException | SQLException e) {
 				e.printStackTrace();
 				throw new IOException(e);
 			}
+        }
+
+        // Like and Unlike
+        boolean likeClicked = req.getParameter("like-song") != null;
+        if(likeClicked) {
+            // Create or Delete the like
+            if(!liked) {
+                try {
+                	System.out.println("create the like of username: " + user.getUserName()+ " and songId: " +  song.getSongId());
+                    likesDao.create(new Likes(user, song, new Date()));
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    throw new IOException(e);
+                }
+            } else {
+                try {
+                    System.out.println("delete the like of username: " + user.getUserName()+ " and songId: " +  song.getSongId());
+                    likesDao.deleteLikeByUserNameAndSongId(user.getUserName(), song.getSongId());
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    throw new IOException(e);
+                }
+            }
         }
         
 
