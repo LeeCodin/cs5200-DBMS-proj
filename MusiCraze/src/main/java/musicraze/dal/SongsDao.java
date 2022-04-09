@@ -15,6 +15,7 @@ public class SongsDao {
 
     private static final String INSERT = "INSERT INTO Songs(SongName, ArtistId, AlbumId) VALUES(?,?,?);";
     private static final String GETBYSONGID = "SELECT * FROM Songs INNER JOIN Artists ON Songs.artistId = Artists.artistId WHERE SongId = ?;";
+    private static final String GETBYSONGNAME = "SELECT * FROM Songs INNER JOIN Artists ON Songs.artistId = Artists.artistId WHERE SongName = ?;";
     private static final String DELETE = "DELETE FROM Songs WHERE SongId = ?;";
     private static final String UPDATE_SONGNAME = "UPDATE Songs SET SongName = ? WHERE SongId = ?;";
     private static final String UPDATE_ARTISTID = "UPDATE Songs SET ArtistId = ? WHERE SongId = ?;";
@@ -111,6 +112,48 @@ public class SongsDao {
             }
         }
         return null;
+    }
+
+    public List<Songs> getSongsByName(String songName) throws SQLException {
+        List<Songs> songs = new ArrayList<Songs>();
+        Connection connection = null;
+        PreparedStatement selectStmt = null;
+        ResultSet results = null;
+        try {
+            connection = this.connectionManager.getConnection();
+            selectStmt = connection.prepareStatement(GETBYSONGNAME);
+            selectStmt.setString(1, songName);
+            results = selectStmt.executeQuery();
+            while (results.next()) {
+                Integer resultId = results.getInt("SongId");
+                String songname = results.getString("SongName");
+                Integer artistId = results.getInt("ArtistId");
+                Integer albumId = results.getInt("AlbumId");
+
+                AlbumsDao albumsDao = AlbumsDao.getInstance();
+                Albums album = albumsDao.getAlbumById(albumId);
+
+                ArtistsDao artistsDao = ArtistsDao.getInstance();
+                Artists artist = artistsDao.getArtistById(artistId);
+
+                Songs song = new Songs(resultId, songname, artist, album);
+                songs.add(song);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            if (connection != null) {
+                connection.close();
+            }
+            if (selectStmt != null) {
+                selectStmt.close();
+            }
+            if (results != null) {
+                results.close();
+            }
+        }
+        return songs;
     }
 
     public Songs updateSongName(Songs songs, String songName) throws SQLException {

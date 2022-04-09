@@ -37,6 +37,12 @@ public class FindUsers extends HttpServlet {
         Map<String, String> messages = new HashMap<String, String>();
         req.setAttribute("messages", messages);
 
+        // Check if user login
+        if (req.getSession().getAttribute("user") == null) {
+          req.getRequestDispatcher("UserLogin.jsp").forward(req, resp);
+          return;
+        }
+        
         List<Users> users = new ArrayList<Users>();
         
         // Retrieve and validate name.
@@ -69,6 +75,12 @@ public class FindUsers extends HttpServlet {
         Map<String, String> messages = new HashMap<String, String>();
         req.setAttribute("messages", messages);
 
+        // Check if user login
+        if (req.getSession().getAttribute("user") == null) {
+          req.getRequestDispatcher("UserLogin.jsp").forward(req, resp);
+          return;
+        }
+        
         List<Users> users = new ArrayList<Users>();
         
         // Retrieve and validate name.

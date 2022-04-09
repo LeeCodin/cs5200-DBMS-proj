@@ -23,17 +23,18 @@ public class UserLogin extends HttpServlet {
   }
 
   @Override
-  public void doGet(HttpServletRequest req, HttpServletResponse res)
+  public void doGet(HttpServletRequest req, HttpServletResponse resp)
       throws ServletException, IOException {
     if (req.getSession().getAttribute("user") == null) {
-      req.getRequestDispatcher("/UserLogin.jsp").forward(req, res);
+      req.getRequestDispatcher("/UserLogin.jsp").forward(req, resp);
       return;
     }
-    res.sendRedirect("UserProfile");
+    // just render the page
+    req.getRequestDispatcher("/UserLogin.jsp").forward(req, resp);
   }
 
   @Override
-  public void doPost(HttpServletRequest req, HttpServletResponse res)
+  public void doPost(HttpServletRequest req, HttpServletResponse resp)
       throws ServletException, IOException {
     Map<String, String> alerts = new HashMap<>();
     try {
@@ -48,17 +49,26 @@ public class UserLogin extends HttpServlet {
       if (alerts.size() != 0) {
         throw new IllegalArgumentException();
       }
-      Users user = this.usersDao.authenticate(userName, password);
+      // Authenticate user name and user password
+      Users user = this.usersDao.authenticateUserName(userName);
+      
       if (user == null) {
-        alerts.put("login", "Invalid credentials. Please try again.");
+        alerts.put("login", "User Not Found");
         throw new IllegalArgumentException();
+      }
+      
+      user = this.usersDao.authenticateUserPassword(user, password);
+    	
+      if (user == null) {
+          alerts.put("login", "Password Incorrect");
+          throw new IllegalArgumentException();
       }
       req.getSession(true).setAttribute("user", user);
       req.setAttribute("user", user);
-      res.sendRedirect("UserProfile");
+      resp.sendRedirect("FindMusic");
     } catch (IllegalArgumentException e) {
       req.setAttribute("alerts", alerts);
-      req.getRequestDispatcher("/UserLogin.jsp").forward(req, res);
+      req.getRequestDispatcher("/UserLogin.jsp").forward(req, resp);
     } catch (SQLException e) {
       e.printStackTrace();
       throw new IOException(e);

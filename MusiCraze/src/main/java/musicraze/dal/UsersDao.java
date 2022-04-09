@@ -233,4 +233,13 @@ public class UsersDao extends PersonsDao {
     }
     return null;
   }
+
+  public Users authenticateUserName(String userName) throws SQLException {
+    Users user = this.getUserByUserName(userName);
+    return user == null ? null : user;
+  }
+
+  public Users authenticateUserPassword(Users user, String password) throws SQLException {
+    return user.getPassword().equals(password) ? user : null;
+  }
 }

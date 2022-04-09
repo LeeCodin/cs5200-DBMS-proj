@@ -21,7 +21,7 @@
 		<% if (session != null && session.getAttribute("user") != null) { %>
 			<script>
 			    function() {
-					window.location.href = "/UserProfile.jsp"
+					window.location.href = "/FindMusic.jsp"
 			    }
 		    </script>
 		<% } else { %>
@@ -43,6 +43,7 @@
 				<p id="alertLogin" style="color: red">${alerts.login}</p>
 			</div>
 		</form>
+		<div id="userCreate">New to MusiCraze? <a href="usercreate">Sign up now.</a></div>
 		<% } %>
 	</div>
 </body>
