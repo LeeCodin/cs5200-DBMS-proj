@@ -21,11 +21,13 @@ public class PlaylistSongsDisplay extends HttpServlet{
 	protected PlaylistsDao playlistsDao;
 	protected SongsDao songsDao;
 	
+	
     @Override
     public void init() throws ServletException {
     	playlistSongContainsDao = PlaylistSongContainsDao.getInstance();
     	playlistsDao = PlaylistsDao.getInstance();
     	songsDao = SongsDao.getInstance();
+    	
     }
     
     @Override
@@ -98,12 +100,14 @@ public class PlaylistSongsDisplay extends HttpServlet{
     	String playlistName = null;
     	String description = null;
     	List<PlaylistSongContains> playlistSongContains = new ArrayList<PlaylistSongContains>();
-
+    	
+    	
     	try {
 			Playlists playlist = playlistsDao.getPlaylistById(playlistId);
 			playlistName = playlist.getPlaylistName();
 			description = playlist.getDescription();
-			playlistSongContains = playlistSongContainsDao.getSongsForPlaylist(playlist);                                                                             
+			playlistSongContains = playlistSongContainsDao.getSongsForPlaylist(playlist);
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new IOException(e);

@@ -81,7 +81,7 @@ public class PlaylistsDao {
 			}
 		}
 	}
-	
+
 	
 	public Playlists updatePlaylistName(Playlists playlist, String newName) throws SQLException {
 		String updatePlaylist = 
@@ -351,5 +351,7 @@ public class PlaylistsDao {
 		}
 		return playlists;
 	}
+	
+
 	
 }

@@ -24,11 +24,14 @@ public class SongGet extends HttpServlet {
 	protected SongsDao songsDao;
 	protected CommentsDao commentsDao;
 	protected LikesDao likesDao;
+	protected PlaylistsDao playlistsDao;
+	protected PlaylistSongContainsDao playlistSongContainsDao;
 	protected Users user;
     protected Songs song;
     protected List<Comments> comments;
     protected List<Comments> usersComments;
     protected List<Likes> likes;
+    protected List<Playlists> playlists;
     private boolean liked = false;
 
 	@Override
@@ -36,6 +39,8 @@ public class SongGet extends HttpServlet {
 		songsDao = SongsDao.getInstance();
 		commentsDao = CommentsDao.getInstance();
 		likesDao = LikesDao.getInstance();
+		playlistsDao = PlaylistsDao.getInstance();
+		playlistSongContainsDao = PlaylistSongContainsDao.getInstance();
 	}
 	
 	@Override
@@ -45,10 +50,18 @@ public class SongGet extends HttpServlet {
         Map<String, String> messages = new HashMap<String, String>();
         req.setAttribute("messages", messages);
         user = (Users) req.getSession().getAttribute("user");
+       
+        if (user == null) {
+          resp.sendRedirect("UserLogin");
+          return;
+        }
+    
         song = null;
         comments = new ArrayList<>();
         usersComments = new ArrayList<>();
         likes = new ArrayList<>();
+        playlists = new ArrayList<Playlists>();
+        
         
         // Retrieve and validate name.
         // firstname is retrieved from the URL query string.
@@ -62,6 +75,7 @@ public class SongGet extends HttpServlet {
             	song = songsDao.getSongById(Integer.valueOf(songId));
              	comments = commentsDao.getCommentsBySongId(Integer.valueOf(songId));
              	likes = likesDao.getLikesBySongId(Integer.valueOf(songId));
+             	playlists = playlistsDao.getPlaylistsForUser(user);
                  // Sort comments by their dates.
                 Collections.sort(comments, new Comparator<Comments>() {
                     @Override
@@ -86,8 +100,7 @@ public class SongGet extends HttpServlet {
                     }
                 }
                 liked = flag;
-
-
+                
             } catch (SQLException e) {
     			e.printStackTrace();
     			throw new IOException(e);
@@ -102,6 +115,7 @@ public class SongGet extends HttpServlet {
         req.setAttribute("usersComments", usersComments);
         req.setAttribute("likesCounts", likes.size());
         req.setAttribute("liked", liked);
+        req.setAttribute("playlists", playlists);
         req.getRequestDispatcher("/SongDetail.jsp").forward(req, resp);
 	}
 	
@@ -174,6 +188,46 @@ public class SongGet extends HttpServlet {
                 }
             }
         }
+        
+        
+        
+        // Add the current song to Playlist
+        String playlistIdStr = req.getParameter("playlistId");
+        if (playlistIdStr != null && playlistIdStr.length() > 0) {
+        	int playlistId = Integer.parseInt(playlistIdStr);
+        	Playlists playlist = null;
+        	Songs currentSong = null;
+        	try {
+				playlist = playlistsDao.getPlaylistById(playlistId);
+				currentSong = songsDao.getSongById(Integer.parseInt(songId));
+        	} catch (SQLException e) {
+				e.printStackTrace();
+				throw new IOException(e);
+			}
+        	
+        	try {
+        		PlaylistSongContains existContain = playlistSongContainsDao.getContainBySongIdPlaylistId(
+        				currentSong.getSongId(), playlist.getPlaylistId());
+        		// Check if the song is already in the playlist
+        		if (existContain == null) {
+        			PlaylistSongContains newContain = new PlaylistSongContains(playlist, currentSong);
+        			newContain = playlistSongContainsDao.create(newContain);
+        			System.out.println("Created new contain, id: " + newContain.getContainId() + " songId: " + currentSong.getSongId() + " playlistId: " + playlist.getPlaylistId());
+        			messages.put("playlistMsg", "Successfully Added " + "\"" + currentSong.getSongName() + "\" to playlist#" + playlist.getPlaylistId() + ": " + playlist.getPlaylistName());
+        		} else {
+        			System.out.println("Failed to Created new contain, songId: " + currentSong.getSongId() + " playlistId: " + playlist.getPlaylistId());
+        			messages.put("playlistMsg", "\"" + currentSong.getSongName() + "\" is already in playlist#" + playlist.getPlaylistId() + ": " + playlist.getPlaylistName());
+        		}
+        	} catch (SQLException e) {
+				e.printStackTrace();
+				throw new IOException(e);
+			}
+			
+        }
+        
+        
+        
+        
         
 
         //List<Users> users = new ArrayList<Users>();
