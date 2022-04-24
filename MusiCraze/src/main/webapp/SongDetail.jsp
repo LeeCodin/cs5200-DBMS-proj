@@ -20,7 +20,7 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
     <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
   </head>
   <body style="background-color: #fffcfc;">
-    <div style="margin-left: 8%; margin-right:8%; margin-top:3%; margin-bottom: 3%;">
+    <div style="margin-left: 8%; margin-right:8%; margin-top:1%; margin-bottom: 3%;">
       <h1>Song Detail</h1>
       <table class="table">
         <thead>
@@ -108,7 +108,7 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 
       <!-- Comments -->
       <h1>Comments</h1>
-      <h3>You can create a comment for this song:</h3>
+      <h3>Create a comment for this song:</h3>
       <form method="post">
         <div class="mb-3">
           <textarea
@@ -162,32 +162,37 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
       </c:if>
 
       <br />
-      <h3>All Comments:</h3>
-      <div class="d-flex flex-wrap">
-        <c:forEach items="${commentsInfo}" var="comment">
-          <div
-            class="card bg-light"
-            style="width: 18rem; margin: 0 1rem 1rem 0.5rem"
-          >
-            <div class="card-header d-flex justify-content-between">
-              <div>
-                <fmt:formatDate value="${comment.getCreatedAt()}" pattern="yyyy-MM-dd" /> 
-              </div>
-              <div>
-                <fmt:formatDate value="${comment.getCreatedAt()}" pattern="hh:mm" />
-              </div>
-            </div>
-            <div class="card-body">
-              <h6 class="card-subtitle" style="margin-bottom: 1rem">
-                 <a href="UserProfile?username=${comment.getUser().getUserName()}" class="text-decoration-none">${comment.getUser().getUserName()}</a> said:
-              </h6>
-              <p class="card-text">${comment.getContent()}</p>
-              <!--  <a href="#" class="card-link">Card link</a>
-					    <a href="#" class="card-link">Another link</a> -->
-            </div>
-          </div>
-        </c:forEach>
-      </div>
+      <c:if test="${commentsInfo.size() != 0}">
+	      <h3>All Comments:</h3>
+	      <div class="d-flex flex-wrap">
+	        <c:forEach items="${commentsInfo}" var="comment">
+	          <div
+	            class="card bg-light"
+	            style="width: 18rem; margin: 0 1rem 1rem 0.5rem"
+	          >
+	            <div class="card-header d-flex justify-content-between">
+	              <div>
+	                <fmt:formatDate value="${comment.getCreatedAt()}" pattern="yyyy-MM-dd" /> 
+	              </div>
+	              <div>
+	                <fmt:formatDate value="${comment.getCreatedAt()}" pattern="hh:mm" />
+	              </div>
+	            </div>
+	            <div class="card-body">
+	              <h6 class="card-subtitle" style="margin-bottom: 1rem">
+	                 <a href="UserProfile?username=${comment.getUser().getUserName()}" class="text-decoration-none">${comment.getUser().getUserName()}</a> said:
+	              </h6>
+	              <p class="card-text">${comment.getContent()}</p>
+	              <!--  <a href="#" class="card-link">Card link</a>
+						    <a href="#" class="card-link">Another link</a> -->
+	            </div>
+	          </div>
+	        </c:forEach>
+	      </div>
+	   </c:if>
+	   <c:if test="${commentsInfo.size() == 0}">
+	   		<h3 style="color:#74ae14"><i>No comments on this song yet, you can be the first one!</i></h3>
+	   </c:if>
     </div>
 
 
