@@ -14,8 +14,10 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
       integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
       crossorigin="anonymous"
     />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
   </head>
   <body>
     <div style="margin: 1% 3% 3% 3%">
@@ -42,7 +44,7 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
             <td>${songInfo.getAlbum().getYear()}</td>
             <%-- <td>${songInfo.getAlbum().getReleaseDate()}</td> --%>
             <td>
-            	<div class="d-flex">
+            	<div class="d-flex align-items-center">
             		<div style="margin-right:1rem;">
             		  	${likesCounts}
             		</div>
@@ -52,11 +54,11 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 	            		 	<%boolean liked = (boolean)request.getAttribute("liked"); %>
 	            		 	<c:choose>
 	            		 		<c:when test="${not liked}">
-	            		 		like
-	            		 	</c:when>
-	            		 	<c:otherwise>
-	            		 		unlike
-	            		 	</c:otherwise>
+                       <i class="bi bi-heart"></i>
+	            		  	</c:when>
+                      <c:otherwise>
+                        <i class="bi bi-heart-fill"></i>
+                      </c:otherwise>
 	            		 	</c:choose>
 	            		 
 						</a>
@@ -82,6 +84,7 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 				    	</form>
 				    	
 				    </li> -->
+            
 				    <c:forEach items="${playlists}" var="playlist">
 				    	<li>
 				    		<form method="post">
@@ -127,7 +130,14 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
               class="card text-white bg-success"
               style="width: 18rem; margin: 0 1rem 1rem 0.5rem"
             >
-              <div class="card-header">${comment.getCreatedAt()}</div>
+            <div class="card-header d-flex justify-content-between">
+              <div>
+                <fmt:formatDate value="${comment.getCreatedAt()}" pattern="yyyy-MM-dd" /> 
+              </div>
+              <div>
+                <fmt:formatDate value="${comment.getCreatedAt()}" pattern="hh:mm" />
+              </div>
+            </div>
               <div class="card-body">
                 <p class="card-text">${comment.getContent()}</p>
 
@@ -159,7 +169,14 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
             class="card bg-light"
             style="width: 18rem; margin: 0 1rem 1rem 0.5rem"
           >
-            <div class="card-header">${comment.getCreatedAt()}</div>
+            <div class="card-header d-flex justify-content-between">
+              <div>
+                <fmt:formatDate value="${comment.getCreatedAt()}" pattern="yyyy-MM-dd" /> 
+              </div>
+              <div>
+                <fmt:formatDate value="${comment.getCreatedAt()}" pattern="hh:mm" />
+              </div>
+            </div>
             <div class="card-body">
               <h6 class="card-subtitle" style="margin-bottom: 1rem">
                 ${comment.getUser().getUserName()} said:
