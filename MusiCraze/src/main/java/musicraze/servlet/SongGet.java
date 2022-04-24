@@ -215,9 +215,9 @@ public class SongGet extends HttpServlet {
         			System.out.println("Created new contain, id: " + newContain.getContainId() + " songId: " + currentSong.getSongId() + " playlistId: " + playlist.getPlaylistId());
         			messages.put("playlistMsg", "Successfully Added " + "\"" + currentSong.getSongName() + "\" to playlist#" + playlist.getPlaylistId() + ": " + playlist.getPlaylistName());
         		} else {
-        			System.out.println("Failed to Created new contain, songId: " + currentSong.getSongId() + " playlistId: " + playlist.getPlaylistId());
+        			System.out.println("Failed to Created new contain, songId: " + currentSong.getSongId() + " playlistId: " + playlist.getPlaylistId() + ". The song is already in the playlist");
         			messages.put("playlistMsg", "\"" + currentSong.getSongName() + "\" is already in playlist#" + playlist.getPlaylistId() + ": " + playlist.getPlaylistName());
-        		}
+        		} // TODO: Display "playlistMsg" on web page.
         	} catch (SQLException e) {
 				e.printStackTrace();
 				throw new IOException(e);

@@ -70,8 +70,8 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 				    Choose Playlist:
 				  </button>
 				  <ul class="dropdown-menu" aria-labelledby="dropdownMenu2" id="playlist-ul" playlists="${playlists}">
-				    <li onclick="$('#playlist-form').submit()">
-				    	<!-- Each <li> should have access to a playlistId and playlistName-->
+				    <!-- <li onclick="$('#playlist-form').submit()">
+				    	Each <li> should have access to a playlistId and playlistName
 				    	<a class="dropdown-item" 
 				    		data-bs-toggle="modal" data-bs-target="#playlistModal" id="dropdown-playlist">
 				    		Playlist33: Crazy Moments
@@ -81,7 +81,7 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 				    		<input type="hidden" name="playlistId" value="33"/>
 				    	</form>
 				    	
-				    </li>
+				    </li> -->
 				    <c:forEach items="${playlists}" var="playlist">
 				    	<li>
 				    		<form method="post">
@@ -93,9 +93,8 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 				    	</li>
 				    </c:forEach>
 				    
-				    
-				    <li><button class="dropdown-item" type="button">Another action</button></li>
-				    <li><button class="dropdown-item" type="button">Something else here</button></li>
+				   <!--  <li><button class="dropdown-item" type="button">Another action</button></li>
+				    <li><button class="dropdown-item" type="button">Something else here</button></li> -->
 				  </ul>
 				</div>
 	           
@@ -239,7 +238,7 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
     
     
     <!-- Modal for "Add to playlist" -->
-	<div class="modal fade" id="playlistModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- 	<div class="modal fade" id="playlistModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	  <div class="modal-dialog">
 	    <div class="modal-content">
 	      <div class="modal-header">
@@ -255,7 +254,7 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 	      </div>
 	    </div>
 	  </div>
-	</div>
+	</div> -->
     
 
     <script type="text/javascript">
