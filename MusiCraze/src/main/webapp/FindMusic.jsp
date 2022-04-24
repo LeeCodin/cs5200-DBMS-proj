@@ -28,7 +28,7 @@
 		    </p>
 		</form>
 		<br/>
-		<div id="userProfile"><a href="EditProfile">${user.getUserName()}</a></div>
+		<div id="userProfile"><a href="UserProfile">${user.getUserName()}</a></div>
 		<br/>
 		<h1>Matching Songs</h1>
 		<table border="1">

@@ -14,6 +14,7 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
       integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
       crossorigin="anonymous"
     />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
   </head>
   <body>
@@ -24,21 +25,22 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
           <tr>
             <th scope="col">Song Title</th>
             <th scope="col">Artist Name</th>
-            <th scope="col">Artist Country</th>
+            <!-- <th scope="col">Artist Country</th> -->
             <th scope="col">Album</th>
             <th scope="col">Year</th>
-            <th scope="col">Release Date</th>
+            <!-- <th scope="col">Release Date</th> -->
             <th scope="col" style="width:8rem;">Likes</th>
+            <th>Add To Playlist</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td>${songInfo.getSongName()}</td>
             <td>${songInfo.getArtist().getArtistName()}</td>
-            <td>${songInfo.getArtist().getArtistCountry()}</td>
+            <%-- <td>${songInfo.getArtist().getArtistCountry()}</td> --%>
             <td>${songInfo.getAlbum().getName()}</td>
             <td>${songInfo.getAlbum().getYear()}</td>
-            <td>${songInfo.getAlbum().getReleaseDate()}</td>
+            <%-- <td>${songInfo.getAlbum().getReleaseDate()}</td> --%>
             <td>
             	<div class="d-flex">
             		<div style="margin-right:1rem;">
@@ -60,6 +62,42 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 						</a>
 	            	</form>
             	</div>       
+            </td>
+            <!-- Add To Playlist Dropdown list -->
+            <td>
+	          	<div class="dropdown">
+				  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
+				    Choose Playlist:
+				  </button>
+				  <ul class="dropdown-menu" aria-labelledby="dropdownMenu2" id="playlist-ul" playlists="${playlists}">
+				    <!-- <li onclick="$('#playlist-form').submit()">
+				    	Each <li> should have access to a playlistId and playlistName
+				    	<a class="dropdown-item" 
+				    		data-bs-toggle="modal" data-bs-target="#playlistModal" id="dropdown-playlist">
+				    		Playlist33: Crazy Moments
+				    	</a>
+				    	
+				    	<form method="post" id="playlist-form">
+				    		<input type="hidden" name="playlistId" value="33"/>
+				    	</form>
+				    	
+				    </li> -->
+				    <c:forEach items="${playlists}" var="playlist">
+				    	<li>
+				    		<form method="post">
+					    		<input type="hidden" name="playlistId" value="${playlist.getPlaylistId()}"/>
+					    		<button class="dropdown-item" type="submit">
+					    			 Playlist#${playlist.getPlaylistId()}: ${playlist.getPlaylistName()} 
+					    		</button>
+				    		</form>
+				    	</li>
+				    </c:forEach>
+				    
+				   <!--  <li><button class="dropdown-item" type="button">Another action</button></li>
+				    <li><button class="dropdown-item" type="button">Something else here</button></li> -->
+				  </ul>
+				</div>
+	           
             </td>
           </tr>
         </tbody>
@@ -197,6 +235,27 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
          <form method="post">
       </div>
     </div>
+    
+    
+    <!-- Modal for "Add to playlist" -->
+<!-- 	<div class="modal fade" id="playlistModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="playlistModalLabel">Modal title</h5>
+	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	      </div>
+	      <div class="modal-body">
+	        ...
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+	        <button type="button" class="btn btn-primary">Save changes</button>
+	      </div>
+	    </div>
+	  </div>
+	</div> -->
+    
 
     <script type="text/javascript">
       var exampleModal = document.getElementById('exampleModal');
@@ -214,6 +273,16 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 				input.value = commentId;
       });
     </script>
+    
+    
+    
+<!--     <script type="text/javascript">
+    	/* Add to playlist*/
+    	const dropdownPlaylist = document.getElementById('dropdown-playlist');
+    	dropdownPlaylist.addEventListener('click', function (event) {
+        	document.getElementById('playlist-form').submit();
+    	});
+    </script>  -->
 
     <script
       src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"

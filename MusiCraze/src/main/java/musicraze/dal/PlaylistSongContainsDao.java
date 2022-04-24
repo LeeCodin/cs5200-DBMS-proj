@@ -223,7 +223,48 @@ public class PlaylistSongContainsDao {
 	
 	
 	
-	
+	public PlaylistSongContains getContainBySongIdPlaylistId(int songId, int playlistId) throws SQLException {
+		String selectContains =
+				"SELECT ContainId, PlaylistId, SongId " +
+				"FROM PlaylistSongContains " +
+				"WHERE SongId=? AND PlaylistId=?;";
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		
+		try {
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectContains);
+			selectStmt.setInt(1, songId);
+			selectStmt.setInt(2, playlistId);
+			results = selectStmt.executeQuery();
+			
+			SongsDao songsDao = SongsDao.getInstance();	
+			PlaylistsDao playlistsDao = PlaylistsDao.getInstance();	
+			if(results.next()) {
+				int containId = results.getInt("ContainId");
+				Songs song = songsDao.getSongById(songId);
+				Playlists playlist = playlistsDao.getPlaylistById(playlistId);
+				PlaylistSongContains contain = new PlaylistSongContains(containId, playlist, song);
+				
+				return contain;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return null;
+	}
 
 
 

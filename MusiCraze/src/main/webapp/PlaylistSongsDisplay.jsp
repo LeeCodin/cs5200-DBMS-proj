@@ -50,7 +50,7 @@
 	      <th scope="col">Song Title</th>
 	      <th scope="col">Artist</th>
 	      <th scope="col">Album</th>
-	      <th scope="col">Like Counts</th>
+	      <!-- <th scope="col">Like Counts</th> -->
 	      <th></th>
 	    </tr>
 	  </thead>
@@ -60,12 +60,14 @@
 	  	<c:forEach items="${playlistSongContains}" var="contain">
 		    <tr>
 	          <th scope="row"><c:out value="${contain.getSong().getSongId()}" /></th>
-		      <td><c:out value="${contain.getSong().getSongName()}" /></td>
-<%-- 	    	  <a href="{TODO!!!}SongDisplay?songId=<c:out value="${song.getSongId()}"/>"><c:out value="${song.getSongName()}" /></a>
- --%>	    	  
+		      <%-- <td><c:out value="${contain.getSong().getSongName()}" /></td> --%>
+ 	    	  <td>
+ 	    	  	<a href="SongDetail?songId=<c:out value="${contain.getSong().getSongId()}"/>"><c:out value="${contain.getSong().getSongName()}" /></a>
+ 	    	  </td>
+    	  
  			  <td><c:out value="${contain.getSong().getArtist().getArtistName()}" /></td>
 			  <td><c:out value="${contain.getSong().getAlbum().getName()}" /></td>
-		      <td>100-TODO!!!</td>
+		      <!-- <td>100-TODO!!!</td> -->
 		      <td>
       		   <form action="PlaylistSongsDisplay" method="post">
 	    		  <span style="display: none">
