@@ -179,7 +179,7 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
             </div>
             <div class="card-body">
               <h6 class="card-subtitle" style="margin-bottom: 1rem">
-                ${comment.getUser().getUserName()} said:
+                 <a href="UserProfile?username=${comment.getUser().getUserName()}" class="text-decoration-none">${comment.getUser().getUserName()}</a> said:
               </h6>
               <p class="card-text">${comment.getContent()}</p>
               <!--  <a href="#" class="card-link">Card link</a>
