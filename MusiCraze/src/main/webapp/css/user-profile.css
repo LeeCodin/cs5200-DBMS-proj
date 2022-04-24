@@ -1,0 +1,27 @@
+@charset "UTF-8";
+   
+.card-img-top {
+    border-radius: 0;
+}
+
+.banner {
+    z-index: 10;
+    aspect-ratio: 5 / 1;
+    object-fit: cover;
+    height: 15rem;
+}
+
+.avatar {
+    z-index: 15;
+    margin-top: -5rem !important;
+    margin-right: 2rem !important;
+    object-fit: cover;
+    border-radius: 50%;
+    aspect-ratio: 1 / 1;
+    width: 10rem;
+    border: 3px solid white;
+}
+
+.fa-solid {
+	line-height: inherit;
+}
