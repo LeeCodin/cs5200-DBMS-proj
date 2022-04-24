@@ -19,8 +19,8 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
     <script src="js/bootstrap.min.js"></script>
     <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
   </head>
-  <body>
-    <div style="margin: 1% 3% 3% 3%">
+  <body style="background-color: #fffcfc;">
+    <div style="margin-left: 8%; margin-right:8%; margin-top:3%; margin-bottom: 3%;">
       <h1>Song Detail</h1>
       <table class="table">
         <thead>
