@@ -131,28 +131,19 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
               <div class="card-body">
                 <p class="card-text">${comment.getContent()}</p>
 
-                <div class="d-flex justify-content-between">
+                <div class="d-flex justify-content-end">
                   <!-- Button trigger modal -->
+
                   <button
                     type="button"
-                    class="btn btn-warning"
+                    class="btn btn-danger"
                     data-bs-toggle="modal"
-                    data-bs-target="#exampleModal"
+                    data-bs-target="#delete-modal"
                     data-bs-content="${comment.getContent()}"
-										data-bs-commentId="${comment.getCommentId()}"
+                    data-bs-commentId="${comment.getCommentId()}"
                   >
-                    Update
+                  Delete
                   </button>
-                  <div style="right: 1rem">
-                    <form method="post">
-                      <input
-                        type="hidden"
-                        name="deleteComment"
-                        value="${comment.getCommentId()}"
-                      />
-                      <button class="btn btn-danger">Delete</button>
-                    </form>
-                  </div>
                 </div>
               </div>
             </div>
@@ -182,9 +173,10 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
       </div>
     </div>
 
+
     <div
       class="modal fade"
-      id="exampleModal"
+      id="delete-modal"
       tabindex="-1"
       aria-labelledby="exampleModalLabel"
       aria-hidden="true"
@@ -192,9 +184,8 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
       <div class="modal-dialog">
         <form method="post">
         <div class="modal-content">
-        
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Update</h5>
+            <h5 class="modal-title" id="exampleModalLabel">Delete</h5>
             <button
               type="button"
               class="btn-close"
@@ -202,36 +193,29 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
               aria-label="Close"
             ></button>
           </div>
-
           <div class="modal-body">
-           
               <div class="mb-3">
                 <label for="message-text" class="col-form-label"
-                  >Your comment:</label
+                  >Are you gonna delete this comment?</label
                 >
-								<input type="hidden" name="comment-id"/>
-                <textarea
-                  class="form-control"
-                  id="message-text"
-                  name="update-comment"
-                ></textarea>
+                <input
+                type="hidden"
+                name="deleteComment"
+              />
+                <h4 id="comment-content"></h4>
               </div>
-        
           </div>
-          
           <div class="modal-footer">
             <button
               type="button"
               class="btn btn-secondary"
               data-bs-dismiss="modal"
             >
-              Close
+              Cancel
             </button>
-            <button type="submit" class="btn btn-primary">Update</button>
+            <button type="submit" class="btn btn-primary">Delete</button>
           </div>
-  
         </div>
-        
          <form method="post">
       </div>
     </div>
@@ -255,23 +239,23 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 	    </div>
 	  </div>
 	</div> -->
+
     
 
     <script type="text/javascript">
-      var exampleModal = document.getElementById('exampleModal');
-      exampleModal.addEventListener('show.bs.modal', function (event) {
-        // Button that triggered the modal
-        var button = event.relatedTarget;
-        // Extract info from data-bs-* attributes
-        var comment = button.getAttribute('data-bs-content');
-				var commentId = button.getAttribute('data-bs-commentId')
-        // If necessary, you could initiate an AJAX request here
-        // and then do the updating in a callback.
-        var textarea = exampleModal.querySelector('.modal-body textarea');
-				var input = exampleModal.querySelector('.modal-body input')
-        textarea.value = comment;
+      const deleteModal = document.getElementById('delete-modal');
+      deleteModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget;
+        const comment = button.getAttribute('data-bs-content');
+				const commentId = button.getAttribute('data-bs-commentId')
+     
+        const h4 = deleteModal.querySelector('.modal-body h4');
+				const input = deleteModal.querySelector('.modal-body input')
 				input.value = commentId;
+        h4.textContent = comment;
       });
+
+
     </script>
     
     
@@ -296,3 +280,8 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
     ></script>
   </body>
 </html>
+
+
+
+
+
