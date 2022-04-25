@@ -14,11 +14,13 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
       integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
       crossorigin="anonymous"
     />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
   </head>
-  <body>
-    <div style="margin: 1% 3% 3% 3%">
+  <body style="background-color: #fffcfc;">
+    <div style="margin-left: 8%; margin-right:8%; margin-top:1%; margin-bottom: 3%;">
       <h1>Song Detail</h1>
       <table class="table">
         <thead>
@@ -42,7 +44,7 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
             <td>${songInfo.getAlbum().getYear()}</td>
             <%-- <td>${songInfo.getAlbum().getReleaseDate()}</td> --%>
             <td>
-            	<div class="d-flex">
+            	<div class="d-flex align-items-center">
             		<div style="margin-right:1rem;">
             		  	${likesCounts}
             		</div>
@@ -52,11 +54,11 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 	            		 	<%boolean liked = (boolean)request.getAttribute("liked"); %>
 	            		 	<c:choose>
 	            		 		<c:when test="${not liked}">
-	            		 		like
-	            		 	</c:when>
-	            		 	<c:otherwise>
-	            		 		unlike
-	            		 	</c:otherwise>
+                       <i class="bi bi-heart"></i>
+	            		  	</c:when>
+                      <c:otherwise>
+                        <i class="bi bi-heart-fill"></i>
+                      </c:otherwise>
 	            		 	</c:choose>
 	            		 
 						</a>
@@ -82,6 +84,7 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 				    	</form>
 				    	
 				    </li> -->
+            
 				    <c:forEach items="${playlists}" var="playlist">
 				    	<li>
 				    		<form method="post">
@@ -105,7 +108,7 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 
       <!-- Comments -->
       <h1>Comments</h1>
-      <h3>You can create a comment for this song:</h3>
+      <h3>Create a comment for this song:</h3>
       <form method="post">
         <div class="mb-3">
           <textarea
@@ -127,32 +130,30 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
               class="card text-white bg-success"
               style="width: 18rem; margin: 0 1rem 1rem 0.5rem"
             >
-              <div class="card-header">${comment.getCreatedAt()}</div>
+            <div class="card-header d-flex justify-content-between">
+              <div>
+                <fmt:formatDate value="${comment.getCreatedAt()}" pattern="yyyy-MM-dd" /> 
+              </div>
+              <div>
+                <fmt:formatDate value="${comment.getCreatedAt()}" pattern="hh:mm" />
+              </div>
+            </div>
               <div class="card-body">
                 <p class="card-text">${comment.getContent()}</p>
 
-                <div class="d-flex justify-content-between">
+                <div class="d-flex justify-content-end">
                   <!-- Button trigger modal -->
+
                   <button
                     type="button"
-                    class="btn btn-warning"
+                    class="btn btn-danger"
                     data-bs-toggle="modal"
-                    data-bs-target="#exampleModal"
+                    data-bs-target="#delete-modal"
                     data-bs-content="${comment.getContent()}"
-										data-bs-commentId="${comment.getCommentId()}"
+                    data-bs-commentId="${comment.getCommentId()}"
                   >
-                    Update
+                  Delete
                   </button>
-                  <div style="right: 1rem">
-                    <form method="post">
-                      <input
-                        type="hidden"
-                        name="deleteComment"
-                        value="${comment.getCommentId()}"
-                      />
-                      <button class="btn btn-danger">Delete</button>
-                    </form>
-                  </div>
                 </div>
               </div>
             </div>
@@ -161,30 +162,43 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
       </c:if>
 
       <br />
-      <h3>All Comments:</h3>
-      <div class="d-flex flex-wrap">
-        <c:forEach items="${commentsInfo}" var="comment">
-          <div
-            class="card bg-light"
-            style="width: 18rem; margin: 0 1rem 1rem 0.5rem"
-          >
-            <div class="card-header">${comment.getCreatedAt()}</div>
-            <div class="card-body">
-              <h6 class="card-subtitle" style="margin-bottom: 1rem">
-                ${comment.getUser().getUserName()} said:
-              </h6>
-              <p class="card-text">${comment.getContent()}</p>
-              <!--  <a href="#" class="card-link">Card link</a>
-					    <a href="#" class="card-link">Another link</a> -->
-            </div>
-          </div>
-        </c:forEach>
-      </div>
+      <c:if test="${commentsInfo.size() != 0}">
+	      <h3>All Comments:</h3>
+	      <div class="d-flex flex-wrap">
+	        <c:forEach items="${commentsInfo}" var="comment">
+	          <div
+	            class="card bg-light"
+	            style="width: 18rem; margin: 0 1rem 1rem 0.5rem"
+	          >
+	            <div class="card-header d-flex justify-content-between">
+	              <div>
+	                <fmt:formatDate value="${comment.getCreatedAt()}" pattern="yyyy-MM-dd" /> 
+	              </div>
+	              <div>
+	                <fmt:formatDate value="${comment.getCreatedAt()}" pattern="hh:mm" />
+	              </div>
+	            </div>
+	            <div class="card-body">
+	              <h6 class="card-subtitle" style="margin-bottom: 1rem">
+	                 <a href="UserProfile?username=${comment.getUser().getUserName()}" class="text-decoration-none">${comment.getUser().getUserName()}</a> said:
+	              </h6>
+	              <p class="card-text">${comment.getContent()}</p>
+	              <!--  <a href="#" class="card-link">Card link</a>
+						    <a href="#" class="card-link">Another link</a> -->
+	            </div>
+	          </div>
+	        </c:forEach>
+	      </div>
+	   </c:if>
+	   <c:if test="${commentsInfo.size() == 0}">
+	   		<h3 style="color:#74ae14"><i>No comments on this song yet, you can be the first one!</i></h3>
+	   </c:if>
     </div>
+
 
     <div
       class="modal fade"
-      id="exampleModal"
+      id="delete-modal"
       tabindex="-1"
       aria-labelledby="exampleModalLabel"
       aria-hidden="true"
@@ -192,9 +206,8 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
       <div class="modal-dialog">
         <form method="post">
         <div class="modal-content">
-        
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Update</h5>
+            <h5 class="modal-title" id="exampleModalLabel">Delete</h5>
             <button
               type="button"
               class="btn-close"
@@ -202,36 +215,29 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
               aria-label="Close"
             ></button>
           </div>
-
           <div class="modal-body">
-           
               <div class="mb-3">
                 <label for="message-text" class="col-form-label"
-                  >Your comment:</label
+                  >Are you gonna delete this comment?</label
                 >
-								<input type="hidden" name="comment-id"/>
-                <textarea
-                  class="form-control"
-                  id="message-text"
-                  name="update-comment"
-                ></textarea>
+                <input
+                type="hidden"
+                name="deleteComment"
+              />
+                <h4 id="comment-content"></h4>
               </div>
-        
           </div>
-          
           <div class="modal-footer">
             <button
               type="button"
               class="btn btn-secondary"
               data-bs-dismiss="modal"
             >
-              Close
+              Cancel
             </button>
-            <button type="submit" class="btn btn-primary">Update</button>
+            <button type="submit" class="btn btn-primary">Delete</button>
           </div>
-  
         </div>
-        
          <form method="post">
       </div>
     </div>
@@ -255,23 +261,23 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 	    </div>
 	  </div>
 	</div> -->
+
     
 
     <script type="text/javascript">
-      var exampleModal = document.getElementById('exampleModal');
-      exampleModal.addEventListener('show.bs.modal', function (event) {
-        // Button that triggered the modal
-        var button = event.relatedTarget;
-        // Extract info from data-bs-* attributes
-        var comment = button.getAttribute('data-bs-content');
-				var commentId = button.getAttribute('data-bs-commentId')
-        // If necessary, you could initiate an AJAX request here
-        // and then do the updating in a callback.
-        var textarea = exampleModal.querySelector('.modal-body textarea');
-				var input = exampleModal.querySelector('.modal-body input')
-        textarea.value = comment;
+      const deleteModal = document.getElementById('delete-modal');
+      deleteModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget;
+        const comment = button.getAttribute('data-bs-content');
+				const commentId = button.getAttribute('data-bs-commentId')
+     
+        const h4 = deleteModal.querySelector('.modal-body h4');
+				const input = deleteModal.querySelector('.modal-body input')
 				input.value = commentId;
+        h4.textContent = comment;
       });
+
+
     </script>
     
     
@@ -296,3 +302,8 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
     ></script>
   </body>
 </html>
+
+
+
+
+

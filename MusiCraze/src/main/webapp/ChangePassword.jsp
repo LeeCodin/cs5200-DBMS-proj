@@ -14,7 +14,30 @@
 <script src="js/bootstrap.min.js"></script>
 </head>
 <body>
-<div class="mt-2 container">
+	<div class="mt-2 container">
+		<div class="navbar navbar-expand navbar-light bg-light">
+			<div class="navbar-brand">MusiCraze</div>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			    <ul class="navbar-nav mr-auto">
+			    	<li class="nav-item">
+			        	<a class="nav-link" href="http://localhost:8080/MusiCraze/FindMusic">Search</a>
+			      	</li>
+			      	<li class="nav-item">
+			        	<a class="nav-link" href="http://localhost:8080/MusiCraze/UserProfile">Profile</a>
+			      	</li>
+			      	<li class="nav-item dropdown">
+			        	<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Settings</a>
+			        	<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+			          		<a class="dropdown-item" href="http://localhost:8080/MusiCraze/EditProfile">Edit Profile</a>
+			          		<a class="dropdown-item active" href="http://localhost:8080/MusiCraze/ChangePassword">Change Password</a>
+			        	</div>
+			      	</li>
+			      	<li class="nav-item">
+			        	<a class="nav-link" href="http://localhost:8080/MusiCraze/UserLogout">Logout</a>
+			      	</li>
+			    </ul>
+		  	</div>
+		</div>
 		<% response.setHeader("Cache-Control","no-cache"); %>
 	    <% response.setHeader("Cache-Control","no-store"); %>
 	    <% response.setHeader("Pragma","no-cache"); %>
@@ -28,26 +51,28 @@
 			    }
 		    </script>
 		<% } else { %>
-		<form action="ChangePassword" method="post">
-			<div class="form-group">
-				<label for="oldPassword" class="row">Old Password: </label>
-				<input id="oldPassword" type="password" class="row col-6" name="oldPassword" value="" />
-				<p id="alertOldPassword" style="color: red">${alerts.oldPassword}</p>
+			<div class="mt-2 container">
+				<form action="ChangePassword" method="post">
+					<div class="form-group">
+						<label for="oldPassword" class="row">Old Password: </label>
+						<input id="oldPassword" type="password" class="row col-6" name="oldPassword" value="" />
+						<p id="alertOldPassword" style="color: red">${alerts.oldPassword}</p>
+					</div>
+					<div class="form-group">
+						<label for="newPassword" class="row">New Password: </label>
+						<input id="newPassword" type="password" class="row col-6" name="newPassword" value="" />
+						<p id="alertNewPassword" style="color: red">${alerts.newPassword}</p>
+					</div>
+					<div class="form-group">
+						<label for="confirmPassword" class="row">Confirm Password: </label>
+						<input id="confirmPassword" type="password" class="row col-6" name="confirmPassword" value="" />
+						<p id="alertConfirmPassword" style="color: red">${alerts.confirmPassword}</p>
+					</div>
+					<div class="form-group">
+						<button type="submit" class="btn btn-primary row col-6">Save</button>
+					</div>
+				</form>
 			</div>
-			<div class="form-group">
-				<label for="newPassword" class="row">New Password: </label>
-				<input id="newPassword" type="password" class="row col-6" name="newPassword" value="" />
-				<p id="alertNewPassword" style="color: red">${alerts.newPassword}</p>
-			</div>
-			<div class="form-group">
-				<label for="confirmPassword" class="row">Confirm Password: </label>
-				<input id="confirmPassword" type="password" class="row col-6" name="confirmPassword" value="" />
-				<p id="alertConfirmPassword" style="color: red">${alerts.confirmPassword}</p>
-			</div>
-			<div class="form-group">
-				<button type="submit" class="btn btn-primary row col-6">Save</button>
-			</div>
-		</form>
 		<% } %>
 	</div>
 </body>
