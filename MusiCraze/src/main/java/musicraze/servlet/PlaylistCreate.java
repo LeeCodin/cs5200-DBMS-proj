@@ -32,7 +32,7 @@ public class PlaylistCreate extends HttpServlet{
         req.setAttribute("messages", messages);
         messages.put("disableDisplayInfo", "true");
         messages.put("disableInput", "false");
-        messages.put("disableSameNameWarning", "true");
+        messages.put("disableNameWarning", "true");
 
     	req.getRequestDispatcher("/PlaylistCreate.jsp").forward(req, res);
     }
@@ -53,6 +53,15 @@ public class PlaylistCreate extends HttpServlet{
         String playlistName = req.getParameter("newPlaylistName");
         System.out.println("playlistName: "+ playlistName);
         String description = req.getParameter("newDescription");
+        
+        if (playlistName == null || playlistName.length() == 0) {
+        	messages.put("disableDisplayInfo", "true");
+			messages.put("disableInput", "false");
+			messages.put("disableNameWarning", "false");
+			messages.put("nameWarningType", "empty");
+			req.getRequestDispatcher("/PlaylistCreate.jsp").forward(req, res);
+			return;
+        }
         
         // Check if the user already has an existing playlist with the same name.
         Playlists sameNamePlaylist = null;
@@ -79,13 +88,14 @@ public class PlaylistCreate extends HttpServlet{
 	        
 	        messages.put("disableDisplayInfo", "false");
 	        messages.put("disableInput", "true");
-	        messages.put("disableSameNameWarning", "true");
+	        messages.put("disableNameWarning", "true");
 			
 		} else {
 			req.setAttribute("duplicatePlaylistName", playlistName);
 			messages.put("disableDisplayInfo", "true");
 			messages.put("disableInput", "false");
-			messages.put("disableSameNameWarning", "false");
+			messages.put("disableNameWarning", "false");
+			messages.put("nameWarningType", "duplicate");
 		}
         
 //        Playlists playlist = new Playlists(user, playlistName, description);

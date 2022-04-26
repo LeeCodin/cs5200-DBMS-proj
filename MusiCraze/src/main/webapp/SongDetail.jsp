@@ -22,6 +22,54 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
   <body style="background-color: #fffcfc;">
     <div style="margin-left: 8%; margin-right:8%; margin-top:1%; margin-bottom: 3%;">
       <h1>Song Detail</h1>
+      
+      <!-- Success/Warning Message for creating playlist -->
+      <div class="pricing-header px-3 py-3 pb-md-4 mx-auto">
+		  <!--  Success Message -->
+		  <div class="alert alert-success" <c:if test=
+		  	"${ messages.createPlaylistSucceed == null || not (messages.createPlaylistSucceed)}">style="display:none"</c:if>> 
+		  	<h5 class="alert-heading"> Playlist <em>${createdPlaylistName}</em> created successfully! </h5>
+		  </div>
+		  
+		  <% System.out.println("disableNameWarning: "+ request.getAttribute("messages")); %>
+		  <!-- Warning Message if the entered playlist name already exists or name is empty-->
+		  <div class="alert alert-warning" <c:if test=
+		  	"${messages.disableNameWarning == null || messages.disableNameWarning}">style="display:none"</c:if>> 
+			<% System.out.println(request.getAttribute("messages")); %>
+			<c:choose>
+				<%-- <c:when test="${messages.nameWarningType !=null && messages.nameWarningType.equals(\"empty\")}">
+					<h5 class="alert-heading">Failed to create playlist! </h5>
+					<p style="margin-bottom: 0;">
+						Please enter a <strong>non-empty</strong> name.
+					</p>
+				</c:when> --%>
+				<c:when test="${messages.nameWarningType !=null && messages.nameWarningType.equals(\"duplicate\")}">
+					<h5 class="alert-heading">Failed to create playlist! </h5>
+					<p style="margin-bottom: 0;">You already have a playlist named: "${duplicatePlaylistName}".
+						<strong>Please enter a different playlist name.</strong>  
+					</p>
+				</c:when>
+				<c:otherwise>
+				</c:otherwise>
+			</c:choose>
+		  </div>
+	  </div>
+	  
+	  <!-- Success/Failure Msg for adding to playlist -->
+	  <div class="pricing-header px-3 py-3 pb-md-4 mx-auto" <c:if test="${messages.addToPlaylistSucceed == null} ">style="display:none"</c:if>>
+	  	  <!--  Success Message -->
+		  <div class="alert alert-success" <c:if test=
+		  	"${ messages.addToPlaylistSucceed == null || not (messages.addToPlaylistSucceed)}">style="display:none"</c:if>> 
+		  	<h5 class="alert-heading"> ${messages.addToPlaylistMsg}  </h5>
+		  </div>
+	  	  <!-- Failure Message if the song is already in the playlist -->
+	   	  <div class="alert alert-warning" <c:if test=
+		  	"${ messages.addToPlaylistSucceed == null || messages.addToPlaylistSucceed}">style="display:none"</c:if>> 
+		  	<h5 class="alert-heading"> ${messages.addToPlaylistMsg}  </h5>
+		  </div>
+	  </div>
+	  
+      <!-- Song Detail Table -->
       <table class="table">
         <thead>
           <tr>
@@ -37,7 +85,9 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
         </thead>
         <tbody>
           <tr>
+           <% System.out.println("Render table before songInfo.getSongName()"); %>
             <td>${songInfo.getSongName()}</td>
+            <% System.out.println("Render table after songInfo.getSongName()"); %>
             <td>${songInfo.getArtist().getArtistName()}</td>
             <%-- <td>${songInfo.getArtist().getArtistCountry()}</td> --%>
             <td>${songInfo.getAlbum().getName()}</td>
@@ -65,6 +115,7 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 	            	</form>
             	</div>       
             </td>
+            
             <!-- Add To Playlist Dropdown list -->
             <td>
 	          	<div class="dropdown">
@@ -72,32 +123,21 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 				    Choose Playlist:
 				  </button>
 				  <ul class="dropdown-menu" aria-labelledby="dropdownMenu2" id="playlist-ul" playlists="${playlists}">
-				    <!-- <li onclick="$('#playlist-form').submit()">
-				    	Each <li> should have access to a playlistId and playlistName
-				    	<a class="dropdown-item" 
-				    		data-bs-toggle="modal" data-bs-target="#playlistModal" id="dropdown-playlist">
-				    		Playlist33: Crazy Moments
-				    	</a>
-				    	
-				    	<form method="post" id="playlist-form">
-				    		<input type="hidden" name="playlistId" value="33"/>
-				    	</form>
-				    	
-				    </li> -->
+				    <!-- Button trigger "Create New Playlist" modal -->
+					<button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#createNewPlaylist">
+					  + Create New Playlist
+					</button>
             
 				    <c:forEach items="${playlists}" var="playlist">
 				    	<li>
 				    		<form method="post">
 					    		<input type="hidden" name="playlistId" value="${playlist.getPlaylistId()}"/>
 					    		<button class="dropdown-item" type="submit">
-					    			 Playlist#${playlist.getPlaylistId()}: ${playlist.getPlaylistName()} 
+					    			 ${playlist.getPlaylistName()} 
 					    		</button>
 				    		</form>
 				    	</li>
 				    </c:forEach>
-				    
-				   <!--  <li><button class="dropdown-item" type="button">Another action</button></li>
-				    <li><button class="dropdown-item" type="button">Something else here</button></li> -->
 				  </ul>
 				</div>
 	           
@@ -190,9 +230,11 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 	        </c:forEach>
 	      </div>
 	   </c:if>
+	   
 	   <c:if test="${commentsInfo.size() == 0}">
 	   		<h3 style="color:#74ae14"><i>No comments on this song yet, you can be the first one!</i></h3>
 	   </c:if>
+	   
     </div>
 
 
@@ -243,24 +285,43 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
     </div>
     
     
-    <!-- Modal for "Add to playlist" -->
-<!-- 	<div class="modal fade" id="playlistModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <!-- Modal for "Create New playlist" -->
+	<div class="modal fade" id="createNewPlaylist" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createNewPlaylistLabel" aria-hidden="true">
 	  <div class="modal-dialog">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <h5 class="modal-title" id="playlistModalLabel">Modal title</h5>
-	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-	      </div>
-	      <div class="modal-body">
-	        ...
-	      </div>
-	      <div class="modal-footer">
-	        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-	        <button type="button" class="btn btn-primary">Save changes</button>
-	      </div>
-	    </div>
+	  	<form action="SongDetail" method="post">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="createNewPlaylistLabel">Create New Playlist</h5>
+		        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		      </div>
+		      <div class="modal-body">
+		        <div class="input-group mb-3 w-100 mx-auto">
+			      <div class="input-group-prepend">
+		   			<span class="input-group-text">Enter New Name:</span>
+		 		  </div>
+				  <input name="newPlaylistName" type="text" class="form-control" placeholder="Name" width="max-content"/>
+				  
+				  <!-- <span style="display: none"> -->
+			    	<%-- <input type="hidden" name="playlistId" value="${playlistId}"/> --%>
+		   		  <!-- </span> -->
+		
+				</div>
+				
+				<div class="input-group w-100 mx-auto">
+				  <div class="input-group-prepend">
+		   			<span class="input-group-text">Enter New Description:</span>
+		 		  </div>
+				  <textarea name="newDescription" class="form-control" placeholder="Description"></textarea>
+				</div>
+		      </div>
+		      <div class="modal-footer">
+		      	<button type="submit" class="btn btn-primary">Create Playlist</button>
+		        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+		      </div>
+		    </div>
+	    </form>
 	  </div>
-	</div> -->
+	</div>
 
     
 
@@ -276,19 +337,7 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 				input.value = commentId;
         h4.textContent = comment;
       });
-
-
     </script>
-    
-    
-    
-<!--     <script type="text/javascript">
-    	/* Add to playlist*/
-    	const dropdownPlaylist = document.getElementById('dropdown-playlist');
-    	dropdownPlaylist.addEventListener('click', function (event) {
-        	document.getElementById('playlist-form').submit();
-    	});
-    </script>  -->
 
     <script
       src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"

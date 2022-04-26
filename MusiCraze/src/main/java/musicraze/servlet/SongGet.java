@@ -46,16 +46,23 @@ public class SongGet extends HttpServlet {
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		// Map for storing messages.
-        Map<String, String> messages = new HashMap<String, String>();
-        req.setAttribute("messages", messages);
-        user = (Users) req.getSession().getAttribute("user");
-       
+		user = (Users) req.getSession().getAttribute("user");
         if (user == null) {
           resp.sendRedirect("UserLogin");
           return;
         }
-    
+		
+		// Set empty Map for messages.
+        Map<String, String> messages = new HashMap<String, String>();
+        req.setAttribute("messages", messages);
+        
+        getRenderInfo(req, resp, messages);
+        
+        req.getRequestDispatcher("/SongDetail.jsp").forward(req, resp);
+	}
+	
+	
+	public void getRenderInfo(HttpServletRequest req, HttpServletResponse resp, Map<String, String> messages) throws IOException {
         song = null;
         comments = new ArrayList<>();
         usersComments = new ArrayList<>();
@@ -116,12 +123,19 @@ public class SongGet extends HttpServlet {
         req.setAttribute("likesCounts", likes.size());
         req.setAttribute("liked", liked);
         req.setAttribute("playlists", playlists);
-        req.getRequestDispatcher("/SongDetail.jsp").forward(req, resp);
+		
 	}
 	
 	@Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp)
     		throws ServletException, IOException {
+		user = (Users) req.getSession().getAttribute("user");
+        if (user == null) {
+          resp.sendRedirect("UserLogin");
+          return;
+        }
+		
+		
         // Map for storing messages.
         Map<String, String> messages = new HashMap<String, String>();
         String songId = req.getParameter("songId");
@@ -213,11 +227,13 @@ public class SongGet extends HttpServlet {
         			PlaylistSongContains newContain = new PlaylistSongContains(playlist, currentSong);
         			newContain = playlistSongContainsDao.create(newContain);
         			System.out.println("Created new contain, id: " + newContain.getContainId() + " songId: " + currentSong.getSongId() + " playlistId: " + playlist.getPlaylistId());
-        			messages.put("playlistMsg", "Successfully Added " + "\"" + currentSong.getSongName() + "\" to playlist#" + playlist.getPlaylistId() + ": " + playlist.getPlaylistName());
+        			messages.put("addToPlaylistSucceed", "true");
+        			messages.put("addToPlaylistMsg", "Successfully Added " + "\"" + currentSong.getSongName() + "\" to playlist: \"" + playlist.getPlaylistName() + "\"");
         		} else {
         			System.out.println("Failed to Created new contain, songId: " + currentSong.getSongId() + " playlistId: " + playlist.getPlaylistId() + ". The song is already in the playlist");
-        			messages.put("playlistMsg", "\"" + currentSong.getSongName() + "\" is already in playlist#" + playlist.getPlaylistId() + ": " + playlist.getPlaylistName());
-        		} // TODO: Display "playlistMsg" on web page.
+        			messages.put("addToPlaylistSucceed", "false");
+        			messages.put("addToPlaylistMsg", "\"" + currentSong.getSongName() + "\" is already in playlist: " + playlist.getPlaylistName());
+        		} 
         	} catch (SQLException e) {
 				e.printStackTrace();
 				throw new IOException(e);
@@ -226,6 +242,58 @@ public class SongGet extends HttpServlet {
         }
         
         
+        // Create New Playlist (and Add the current song?)
+        String newPlaylistName = req.getParameter("newPlaylistName");
+        String newDescription = req.getParameter("newDescription");
+        System.out.println("newPlaylistName: "+ newPlaylistName);
+        
+        if (newPlaylistName == null || newPlaylistName.length() == 0) {
+        	
+        	System.out.println("SuccessMsg" + messages.get("createPlaylistSucceed"));
+        	System.out.println("WarnMsg" + messages.get("disableNameWarning"));
+//        } else if (newPlaylistName.length() == 0){
+//        	messages.put("disableNameWarning", "false");
+//        	messages.put("nameWarningType", "empty");        	
+        } else {
+        	// Check if the user already has an existing playlist with the same name.
+            Playlists sameNamePlaylist = null;
+            
+            try {
+    			sameNamePlaylist = playlistsDao.getPlaylistByNameForUser(newPlaylistName, user);
+    		} catch (SQLException e1) {
+    			e1.printStackTrace();
+    			throw new IOException(e1);
+    		}
+            
+    		if (sameNamePlaylist == null) {
+    			Playlists playlist = new Playlists(user, newPlaylistName, newDescription);
+    			try {
+    				playlist = playlistsDao.create(playlist);
+    			} catch (SQLException e) {
+    				e.printStackTrace();
+    				throw new IOException(e);
+    			}
+    		        
+//    	        req.setAttribute("createdPlaylistId", playlist.getPlaylistId());
+    			req.setAttribute("createdPlaylistName", newPlaylistName);
+//    	        req.setAttribute("createdDescription", newDescription);
+    			System.out.println("Successfully created playlist!");
+    	        
+//    	        messages.put("disableDisplayInfo", "false");
+//    	        messages.put("disableInput", "true");
+    	        messages.put("disableNameWarning", "true");
+    			messages.put("createPlaylistSucceed", "true");
+    			
+    		} else {
+    			req.setAttribute("duplicatePlaylistName", newPlaylistName);
+//    			messages.put("disableDisplayInfo", "true");
+//    			messages.put("disableInput", "false");
+    			messages.put("disableNameWarning", "false");
+    			messages.put("nameWarningType", "duplicate");
+    		}
+        }
+        
+        System.out.println("After route: messages:"+ messages);
         
         
         
@@ -249,10 +317,14 @@ public class SongGet extends HttpServlet {
         	messages.put("success", "Displaying songs with title " + songTitle);
         }
        
-        req.setAttribute("users", song);
+        // req.setAttribute("users", song); //??
        
         // Redirect to the same page
-        resp.sendRedirect(req.getContextPath() + "/SongDetail?songId=" + songId);
+        // resp.sendRedirect(req.getContextPath() + "/SongDetail?songId=" + songId);
+        
+        
+        getRenderInfo(req, resp, messages);
+        req.getRequestDispatcher("/SongDetail.jsp").forward(req, resp);
  
     }
 }

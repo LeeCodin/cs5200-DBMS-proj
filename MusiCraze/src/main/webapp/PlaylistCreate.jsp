@@ -41,32 +41,42 @@
 		</div>
 
 	
-		<div class="pricing-header px-3 py-3 pb-md-4 mx-auto text-center"
-		>
+		<div class="pricing-header px-3 py-3 pb-md-4 mx-auto">
 		  <!--  Success Message -->
 		  <div class="alert alert-success" <c:if test="${messages.disableDisplayInfo}">style="display:none"</c:if>> 
 		  	<h5 class="alert-heading"> Playlist created successfully! </h5>
 		  </div>
 		  
-		  <!-- Warning Message if the entered playlist name already exists -->
-		  <div class="alert alert-warning" <c:if test="${messages.disableSameNameWarning}">style="display:none"</c:if>> 
-			<h5 class="alert-heading">Duplicate playlist name: </h5>
-			<p>You already have a playlist named: "${duplicatePlaylistName}".
-				   <strong>Please enter a different playlist name.</strong>  
-			</p>
+		  <!-- Warning Message if the entered playlist name already exists or name is empty-->
+		  <div class="alert alert-warning" <c:if test="${messages.disableNameWarning}">style="display:none"</c:if>> 
+			<% System.out.println(request.getAttribute("messages")); %>
+			<c:choose>
+				<c:when test="${messages.nameWarningType.equals(\"empty\")}">
+					<h5 class="alert-heading">Failed to create playlist! </h5>
+					<p style="margin-bottom: 0;">
+						Please enter a <strong>non-empty</strong> name.
+					</p>
+				</c:when>
+				<c:when test="${messages.nameWarningType.equals(\"duplicate\")}">
+					<h5 class="alert-heading">Failed to create playlist! </h5>
+					<p style="margin-bottom: 0;">You already have a playlist named: "${duplicatePlaylistName}".
+						<strong>Please enter a different playlist name.</strong>  
+					</p>
+				</c:when>
+				<c:otherwise>
+				</c:otherwise>
+			</c:choose>
 		  </div>
 		  
 		  
-		  <h2 class="display-5">Playlist Name: ${createdPlaylistName}</h2>
-	      <p class="lead"><strong>Description: </strong><br/>${createdDescription}</p>
+		  <h2 class="display-5 text-center">Playlist Name: ${createdPlaylistName}</h2>
+	      <p class="lead text-center"><strong>Description: </strong><br/>${createdDescription}</p>
 		</div> 
 	
 	
 		<form action="PlaylistCreate" method="post" class="text-center"
 			<c:if test="${messages.disableInput}">style="display:none"</c:if>
-		>
-		
-			
+		>	
 			<div class="input-group mb-3 w-25 mx-auto">
 		      <div class="input-group-prepend">
 	   			<span class="input-group-text">Enter Playlist Name:</span>
