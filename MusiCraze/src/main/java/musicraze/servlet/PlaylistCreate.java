@@ -73,7 +73,8 @@ public class PlaylistCreate extends HttpServlet{
 				throw new IOException(e);
 			}
 		        
-	        req.setAttribute("createdPlaylistName", playlistName);
+	        req.setAttribute("createdPlaylistId", playlist.getPlaylistId());
+			req.setAttribute("createdPlaylistName", playlistName);
 	        req.setAttribute("createdDescription", description);
 	        
 	        messages.put("disableDisplayInfo", "false");

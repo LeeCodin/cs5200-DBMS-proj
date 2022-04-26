@@ -20,8 +20,33 @@
 </head>
 
 <body>
+	<div class="mt-2 container">
+		<div class="navbar navbar-expand navbar-light bg-light">
+			<div class="navbar-brand">MusiCraze</div>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			    <ul class="navbar-nav mr-auto">
+			    	<li class="nav-item">
+			        	<a class="nav-link" href="FindMusic">Search</a>
+			      	</li>
+			      	<li class="nav-item active">
+			        	<a class="nav-link" href="UserProfile">Profile</a>
+			      	</li>
+			      	<li class="nav-item dropdown">
+			        	<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Settings</a>
+			        	<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+			          		<a class="dropdown-item" href="EditProfile">Edit Profile</a>
+			          		<a class="dropdown-item" href="ChangePassword">Change Password</a>
+			        	</div>
+			      	</li>
+			      	<li class="nav-item">
+			        	<a class="nav-link" href="UserLogout">Logout</a>
+			      	</li>
+			    </ul>
+		  	</div>
+		</div>
+	</div>
 	
-	<div class="card " style="height: 30%; width: 70%; margin-left:15%; border: 0px; margin-bottom: 2%">
+		<div class="card " style="height: 30%; width: 70%; margin-top: 1%; margin-left:15%; border: 0px; margin-bottom: 2%">
 		<!-- <img src="https://cdn.pixabay.com/photo/2017/08/06/12/08/headphones-2591890_1280.jpg" class="card-img"  > -->
 		<img src="https://thumbs.dreamstime.com/b/pink-headphones-banner-minimal-music-concept-flat-lay-copy-space-monochrome-colors-215293223.jpg" 
 			class="card-img" style="height:45vh; opacity: 0.5"  >
@@ -32,8 +57,8 @@
 	      </h2>
 	      <% if (guest !=null) {%>
 	      	<p class="lead text-center">
-	      		<span style="background-color:var(--info); margin-right: 5px">
-	      			<i class="bi bi-person-circle" fill="currentColor"></i>
+	      		<span style="margin-right: 5px">
+	      			<i class="bi bi-person" fill="currentColor"></i>
 	      		</span>
 	      		<strong>Creator: </strong> 
 	      		<a href="UserProfile?username=${guest.getUserName()}"><em>${guest.getUserName()}</em></a>
@@ -59,67 +84,59 @@
 	      <%} %>
 	      
 	    </div>
-	    
-
     </div>
-    
-    
 
-    
-    
-    
 	<div style="width: 80%; margin-left: 10%;">
 
-    <div 
-		<c:if test="${messages.disableMessage}">style="display:none"</c:if>
-		<c:if test="${messages.isSuccessful}">class="alert alert-success"</c:if>
-		<c:if test="${!(messages.isSuccessful)}">class="alert alert-danger"</c:if>
-		style="margin-top: 1%"
-		>
- 	  ${messages.title} 
-   	</div> 
+	    <div 
+			<c:if test="${messages.disableMessage}">style="display:none"</c:if>
+			<c:if test="${messages.isSuccessful}">class="alert alert-success"</c:if>
+			<c:if test="${!(messages.isSuccessful)}">class="alert alert-danger"</c:if>
+			style="margin-top: 1%"
+			>
+	 	  ${messages.title} 
+	   	</div> 
 	
-	<table class="table table-striped table-hover" >
-	  <thead class="thead-light">
-	    <tr>
-	      <!-- <th scope="col">Song ID</th> -->
-	      <th scope="col">Song Title</th>
-	      <th scope="col">Artist</th>
-	      <th scope="col">Album</th>
-	      <!-- <th scope="col">Like Counts</th> -->
-	      <th></th>
-	    </tr>
-	  </thead>
-	 
-	  
-	  <tbody>
-	  	<c:forEach items="${playlistSongContains}" var="contain">
+		<table class="table table-striped table-hover" >
+		  <thead class="thead-light">
 		    <tr>
-	          <%-- <th scope="row"><c:out value="${contain.getSong().getSongId()}" /></th> --%>
-		      <%-- <td><c:out value="${contain.getSong().getSongName()}" /></td> --%>
- 	    	  <td>
- 	    	  	<a href="SongDetail?songId=<c:out value="${contain.getSong().getSongId()}"/>"><c:out value="${contain.getSong().getSongName()}" /></a>
- 	    	  </td>
-    	  
- 			  <td><c:out value="${contain.getSong().getArtist().getArtistName()}" /></td>
-			  <td><c:out value="${contain.getSong().getAlbum().getName()}" /></td>
-		      <!-- <td>100-TODO!!!</td> -->
-		      <td>
-      		   <form action="PlaylistSongsDisplay" method="post">
-	    		  <span style="display: none">
-	    		  	<input name="containId" value="${contain.getContainId()}"/>
-	    		  	<input name="playlistId" value="${playlistId}"/>
-	    		  </span>
-	    		  <input class="delete" type="submit" value="Remove from this playlist" <c:if test="${guest!=null}">style="display:none"</c:if>/>
-	    		</form> 
-		      </td>
-		      
+		      <!-- <th scope="col">Song ID</th> -->
+		      <th scope="col">Song Title</th>
+		      <th scope="col">Artist</th>
+		      <th scope="col">Album</th>
+		      <!-- <th scope="col">Like Counts</th> -->
+		      <th></th>
 		    </tr>
-	     </c:forEach>
-	  </tbody>
-	</table>
+		  </thead>
+		 
+		  
+		  <tbody>
+		  	<c:forEach items="${playlistSongContains}" var="contain">
+			    <tr>
+		          <%-- <th scope="row"><c:out value="${contain.getSong().getSongId()}" /></th> --%>
+			      <%-- <td><c:out value="${contain.getSong().getSongName()}" /></td> --%>
+	 	    	  <td>
+	 	    	  	<a href="SongDetail?songId=<c:out value="${contain.getSong().getSongId()}"/>"><c:out value="${contain.getSong().getSongName()}" /></a>
+	 	    	  </td>
+	    	  
+	 			  <td><c:out value="${contain.getSong().getArtist().getArtistName()}" /></td>
+				  <td><c:out value="${contain.getSong().getAlbum().getName()}" /></td>
+			      <!-- <td>100-TODO!!!</td> -->
+			      <td>
+	      		   <form action="PlaylistSongsDisplay" method="post">
+		    		  <span style="display: none">
+		    		  	<input name="containId" value="${contain.getContainId()}"/>
+		    		  	<input name="playlistId" value="${playlistId}"/>
+		    		  </span>
+		    		  <input class="delete" type="submit" value="Remove from this playlist" <c:if test="${guest!=null}">style="display:none"</c:if>/>
+		    		</form> 
+			      </td>
+			      
+			    </tr>
+		     </c:forEach>
+		  </tbody>
+		</table>
 	</div>
-		
-
+	
 </body>
 </html>

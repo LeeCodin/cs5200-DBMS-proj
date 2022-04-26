@@ -15,7 +15,32 @@
 </head>
 
 <body>
-	<h1 class="display-5">Update Playlist Info:</h1>
+	<div class="mt-2 container">
+		<div class="navbar navbar-expand navbar-light bg-light" style="margin-bottom: 2%">
+			<div class="navbar-brand">MusiCraze</div>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			    <ul class="navbar-nav mr-auto">
+			    	<li class="nav-item">
+			        	<a class="nav-link" href="FindMusic">Search</a>
+			      	</li>
+			      	<li class="nav-item active">
+			        	<a class="nav-link" href="UserProfile">Profile</a>
+			      	</li>
+			      	<li class="nav-item dropdown">
+			        	<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Settings</a>
+			        	<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+			          		<a class="dropdown-item" href="EditProfile">Edit Profile</a>
+			          		<a class="dropdown-item" href="ChangePassword">Change Password</a>
+			        	</div>
+			      	</li>
+			      	<li class="nav-item">
+			        	<a class="nav-link" href="UserLogout">Logout</a>
+			      	</li>
+			    </ul>
+		  	</div>
+		</div>
+		
+		<!-- <h5 class="display-5">Update Playlist Info:</h5> -->
 	
 	<div class="alert alert-success" <c:if test="${messages.disableSuccess}">style="display:none"</c:if>> 
 	  <h5 class="alert-heading"> Playlist Info updated successfully! </h5>
@@ -34,7 +59,7 @@
 	
 	<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
 	  
-	  	<h2 class="display-5">Playlist Name: ${playlistName}</h2>
+	  <h2 class="display-5">Playlist Name: ${playlistName}</h2>
 	  	
       
       <p class="lead"><strong>Description: </strong><br/>${description}</p>
@@ -43,11 +68,11 @@
 	
 	<form action="PlaylistUpdateInfo" method="post" class="text-center">
 		
-		<div class="input-group mb-3 w-25 mx-auto">
+		<div class="input-group mb-3 w-50 mx-auto">
 	      <div class="input-group-prepend">
    			<span class="input-group-text">Enter New Name:</span>
  		  </div>
-		  <input name="newPlaylistName" type="text" class="form-control" placeholder="Name" value="${playlistName}" />
+		  <input name="newPlaylistName" type="text" class="form-control" placeholder="Name" value="${playlistName}" width="max-content"/>
 		  
 		  <span style="display: none">
 	    	<input name="playlistId" value="${playlistId}"/>
@@ -71,6 +96,12 @@
        		</a>
 	    </div>
 	</form>
+		
+		
+	</div>
+
+
+	
 	
 
 
