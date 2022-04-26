@@ -54,19 +54,22 @@
 			<div class="mt-2 container">
 				<form action="ChangePassword" method="post">
 					<div class="form-group">
-						<label for="oldPassword" class="row">Old Password: </label>
+						<label for="oldPassword" class="row">Old Password:<span class="ml-2 text-danger">&#42;</span></label>
 						<input id="oldPassword" type="password" class="row col-6" name="oldPassword" value="" />
-						<p id="alertOldPassword" style="color: red">${alerts.oldPassword}</p>
+						<div class="row" id="alertOldPassword" style="color: red">${alerts.oldPassword}</div>
 					</div>
 					<div class="form-group">
-						<label for="newPassword" class="row">New Password: </label>
+						<label for="newPassword" class="row">New Password:<span class="ml-2 text-danger">&#42;</span></label>
 						<input id="newPassword" type="password" class="row col-6" name="newPassword" value="" />
-						<p id="alertNewPassword" style="color: red">${alerts.newPassword}</p>
+						<div class="row" id="alertNewPassword" style="color: red">${alerts.newPassword}</div>
 					</div>
 					<div class="form-group">
-						<label for="confirmPassword" class="row">Confirm Password: </label>
+						<label for="confirmPassword" class="row">Confirm Password:<span class="ml-2 text-danger">&#42;</span></label>
 						<input id="confirmPassword" type="password" class="row col-6" name="confirmPassword" value="" />
-						<p id="alertConfirmPassword" style="color: red">${alerts.confirmPassword}</p>
+						<div class="row" id="alertConfirmPassword" style="color: red">${alerts.confirmPassword}</div>
+					</div>
+					<div class="form-group">
+						<div class="row text-secondary">Fields marked with an <span class="ml-2 mr-2 text-danger">&#42;</span> are required.</div>
 					</div>
 					<div class="form-group">
 						<button type="submit" class="btn btn-primary row col-6">Save</button>

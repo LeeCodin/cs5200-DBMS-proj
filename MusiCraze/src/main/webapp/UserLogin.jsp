@@ -25,25 +25,25 @@
 			    }
 		    </script>
 		<% } else { %>
-		<form action="UserLogin" method="post">
-			<div class="form-group">
-				<label for="userName" class="row">User Name: </label>
-				<input id="userName" class="row col-6" name="userName" value="" />
-				<p id="alertUserName" style="color: red">${alerts.userName}</p>
-			</div>
-			<div class="form-group">
-				<label for="password" class="row">Password: </label>
-				<input id="password" type="password" class="row col-6" name="password" value="" />
-				<p id="alertPassword" style="color: red">${alerts.password}</p>
-			</div>
-			<div class="form-group">
-				<button type="submit" class="btn btn-primary row col-6">Login</button>
-			</div>
-			<div class="form-group">
-				<p id="alertLogin" style="color: red">${alerts.login}</p>
-			</div>
-		</form>
-		<div id="userCreate">New to MusiCraze? <a href="usercreate">Sign up now.</a></div>
+			<form action="UserLogin" method="post">
+				<div class="form-group">
+					<label for="userName" class="row">User Name:</label>
+					<input id="userName" class="row col-6" name="userName" value="" />
+					<div class="row" id="alertUserName" style="color: red">${alerts.userName}</div>
+				</div>
+				<div class="form-group">
+					<label for="password" class="row">Password:</label>
+					<input id="password" type="password" class="row col-6" name="password" value="" />
+					<div class="row" id="alertPassword" style="color: red">${alerts.password}</div>
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary row col-6">Login</button>
+				</div>
+				<div class="form-group">
+					<div class="row" id="alertLogin" style="color: red">${alerts.login}</div>
+				</div>
+			</form>
+			<div class="row col-6 justify-content-center">New to MusiCraze?<a class="ml-2" href="UserRegister">Register now</a></div>
 		<% } %>
 	</div>
 </body>

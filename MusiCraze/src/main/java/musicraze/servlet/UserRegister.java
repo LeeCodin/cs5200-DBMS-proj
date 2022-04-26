@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Date;
@@ -18,8 +19,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/EditProfile")
-public class EditProfile extends HttpServlet {
+
+@WebServlet("/UserRegister")
+public class UserRegister extends HttpServlet {
 
   private UsersDao usersDao;
 
@@ -31,32 +33,35 @@ public class EditProfile extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest req, HttpServletResponse res)
       throws ServletException, IOException {
-    Users user = (Users) (req.getSession().getAttribute("user"));
-    if (user == null) {
-      res.sendRedirect("UserLogin");
+    if (req.getSession().getAttribute("user") == null) {
+      req.getRequestDispatcher("/UserRegister.jsp").forward(req, res);
       return;
     }
-    req.setAttribute("inputs", this.generateDefaultInputs(user));
-    req.getRequestDispatcher("/EditProfile.jsp").forward(req, res);
+    res.sendRedirect("FindMusic");
   }
 
   @Override
   public void doPost(HttpServletRequest req, HttpServletResponse res)
       throws ServletException, IOException {
-    Users user = (Users) (req.getSession().getAttribute("user"));
-    if (user == null) {
-      res.sendRedirect("UserLogin");
-      return;
-    }
     Map<String, String> alerts = new HashMap<>();
     String[] inputs = this.retrieveActualInputs(req);
     try {
-      String firstName = this.validateLegalName(inputs[0]);
-      String lastName = this.validateLegalName(inputs[1]);
-      String email = this.validateEmail(inputs[2]);
-      String avatar = this.validateAvatar(inputs[3]);
-      String bio = inputs[4];
-      Date bornDate = this.validateBornDate(inputs[5]);
+      String userName = this.validateUserName(inputs[0]);
+      String password = this.validatePassword(inputs[1]);
+      String firstName = this.validateLegalName(inputs[2]);
+      String lastName = this.validateLegalName(inputs[3]);
+      String email = this.validateEmail(inputs[4]);
+      String avatar = this.validateAvatar(inputs[5]);
+      String bio = inputs[6];
+      Date bornDate = this.validateBornDate(inputs[7]);
+      if (userName == null) {
+        alerts.put("userName", "User name must contain only letters or numbers.");
+      } else if (this.usersDao.isDuplicatedUserName(userName)) {
+        alerts.put("userName", "User name already exists. Please try another.");
+      }
+      if (password == null) {
+        alerts.put("password", "Password cannot be empty or contain spaces.");
+      }
       if (firstName == null) {
         alerts.put("firstName", "First name must contain only letters or spaces.");
       }
@@ -76,61 +81,47 @@ public class EditProfile extends HttpServlet {
       if (alerts.size() != 0) {
         throw new IllegalArgumentException();
       }
-      if (!user.getFirstName().equals(firstName)) {
-        user = this.usersDao.updateFirstName(user, firstName);
-      }
-      if (!user.getLastName().equals(lastName)) {
-        user = this.usersDao.updateLastName(user, lastName);
-      }
-      if (!user.getEmail().equals(email)) {
-        user = this.usersDao.updateEmail(user, email);
-      }
-      if (!user.getAvatar().equals(avatar)) {
-        user = this.usersDao.updateAvatar(user, avatar);
-      }
-      if (!user.getBio().equals(bio)) {
-        user = this.usersDao.updateBio(user, bio);
-      }
-      if (!user.getBornDate().equals(bornDate)) {
-        user = this.usersDao.updateBornDate(user, bornDate);
-      }
-      req.setAttribute("user", user);
-      req.getSession().setAttribute("user", user);
-      res.sendRedirect("UserProfile");
+      this.usersDao.create(new Users(userName, password, firstName, lastName, email, avatar, bio, bornDate, Instant.now()));
+      res.sendRedirect("UserLogin");
     } catch (IllegalArgumentException e) {
       req.setAttribute("alerts", alerts);
       req.setAttribute("inputs", inputs);
-      req.getRequestDispatcher("/EditProfile.jsp").forward(req, res);
+      req.getRequestDispatcher("/UserRegister.jsp").forward(req, res);
     } catch (SQLException e) {
       e.printStackTrace();
       throw new IOException(e);
     }
   }
-  
-  private String[] generateDefaultInputs(Users user) {
-    String[] inputs = new String[6];
-    inputs[0] = user.getFirstName();
-    inputs[1] = user.getLastName();
-    inputs[2] = user.getEmail();
-    inputs[3] = user.getAvatar();
-    inputs[4] = user.getBio();
-    inputs[5] = user.getBornDateStr();
-    return inputs;
-  }
 
   private String[] retrieveActualInputs(HttpServletRequest req) {
-    String[] inputs = new String[6];
-    inputs[0] = this.trimString(req.getParameter("firstName"));
-    inputs[1] = this.trimString(req.getParameter("lastName"));
-    inputs[2] = this.trimString(req.getParameter("email"));
-    inputs[3] = this.trimString(req.getParameter("avatar"));
-    inputs[4] = this.trimString(req.getParameter("bio"));
-    inputs[5] = this.trimString(req.getParameter("bornDate"));
+    String[] inputs = new String[8];
+    inputs[0] = this.trimString(req.getParameter("userName"));
+    inputs[1] = this.trimString(req.getParameter("password"));
+    inputs[2] = this.trimString(req.getParameter("firstName"));
+    inputs[3] = this.trimString(req.getParameter("lastName"));
+    inputs[4] = this.trimString(req.getParameter("email"));
+    inputs[5] = this.trimString(req.getParameter("avatar"));
+    inputs[6] = this.trimString(req.getParameter("bio"));
+    inputs[7] = this.trimString(req.getParameter("bornDate"));
     return inputs;
   }
 
   private String trimString(String str) {
     return str == null ? "" : str.trim();
+  }
+
+  private String validateUserName(String userName) {
+    if (userName.matches("^[A-Za-z0-9]+$")) {
+      return userName.toLowerCase();
+    }
+    return null;
+  }
+
+  private String validatePassword(String password) {
+    if (password.contains(" ") || password.isEmpty()) {
+      return null;
+    }
+    return password;
   }
 
   private String validateLegalName(String legalName) {

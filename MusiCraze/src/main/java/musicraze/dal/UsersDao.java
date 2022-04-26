@@ -233,6 +233,10 @@ public class UsersDao extends PersonsDao {
     }
     return null;
   }
+  
+  public boolean isDuplicatedUserName(String userName) throws SQLException {
+    return super.getPersonByUserName(userName) != null;
+  }
 
   public Users authenticateUserName(String userName) throws SQLException {
     Users user = this.getUserByUserName(userName);
