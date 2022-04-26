@@ -16,7 +16,7 @@
 
 <body>
 	<div class="mt-2 container">
-		<div class="navbar navbar-expand navbar-light bg-light" style="margin-bottom: 2%">
+		<div class="navbar navbar-expand navbar-dark bg-dark" style="margin-bottom: 2%">
 			<div class="navbar-brand">MusiCraze</div>
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			    <ul class="navbar-nav mr-auto">

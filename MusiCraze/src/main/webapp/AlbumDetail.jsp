@@ -20,8 +20,36 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
     <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 </head>
 <body style="background-color: #fffcfc;">
+  	<div class="mt-2 container">
+		<div class="navbar navbar-expand navbar-dark bg-dark">
+			<div class="navbar-brand">MusiCraze</div>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			    <ul class="navbar-nav mr-auto">
+			    	<li class="nav-item">
+			        	<a class="nav-link" href="FindMusic">Search</a>
+			      	</li>
+			      	<li class="nav-item active">
+			        	<a class="nav-link" href="UserProfile">Profile</a>
+			      	</li>
+			      	<li class="nav-item dropdown">
+			        	<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Settings</a>
+			        	<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+			          		<a class="dropdown-item" href="EditProfile">Edit Profile</a>
+			          		<a class="dropdown-item" href="ChangePassword">Change Password</a>
+			        	</div>
+			      	</li>
+			      	<li class="nav-item">
+			        	<a class="nav-link" href="UserLogout">Logout</a>
+			      	</li>
+			    </ul>
+		  	</div>
+		</div>
+	</div>
+
+
+
 	<div style="margin-left: 8%; margin-right:8%; margin-top:1%; margin-bottom: 3%;">
-		<h1>${albumInfo.getName()}</h1>
+		<h1>Album: ${albumInfo.getName()}</h1>
 		<table class="table">
 			<thead>
 				<tr>

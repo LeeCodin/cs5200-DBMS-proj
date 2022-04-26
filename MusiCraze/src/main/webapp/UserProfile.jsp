@@ -43,25 +43,25 @@
 </head>
 <body>
 	<div class="mt-2 container">
-		<div class="navbar navbar-expand navbar-light bg-light">
+		<div class="navbar navbar-expand navbar-dark bg-dark">
 			<div class="navbar-brand">MusiCraze</div>
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			    <ul class="navbar-nav mr-auto">
 			    	<li class="nav-item">
-			        	<a class="nav-link" href="http://localhost:8080/MusiCraze/FindMusic">Search</a>
+			        	<a class="nav-link" href="FindMusic">Search</a>
 			      	</li>
 			      	<li class="nav-item active">
-			        	<a class="nav-link" href="http://localhost:8080/MusiCraze/UserProfile">Profile</a>
+			        	<a class="nav-link" href="UserProfile">Profile</a>
 			      	</li>
 			      	<li class="nav-item dropdown">
 			        	<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Settings</a>
 			        	<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-			          		<a class="dropdown-item" href="http://localhost:8080/MusiCraze/EditProfile">Edit Profile</a>
-			          		<a class="dropdown-item" href="http://localhost:8080/MusiCraze/ChangePassword">Change Password</a>
+			          		<a class="dropdown-item" href="EditProfile">Edit Profile</a>
+			          		<a class="dropdown-item" href="ChangePassword">Change Password</a>
 			        	</div>
 			      	</li>
 			      	<li class="nav-item">
-			        	<a class="nav-link" href="http://localhost:8080/MusiCraze/UserLogout">Logout</a>
+			        	<a class="nav-link" href="UserLogout">Logout</a>
 			      	</li>
 			    </ul>
 		  	</div>

@@ -20,57 +20,38 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
     <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
   </head>
   <body style="background-color: #fffcfc;">
+  	<div class="mt-2 container">
+		<div class="navbar navbar-expand navbar-dark bg-dark">
+			<div class="navbar-brand">MusiCraze</div>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			    <ul class="navbar-nav mr-auto">
+			    	<li class="nav-item">
+			        	<a class="nav-link" href="FindMusic">Search</a>
+			      	</li>
+			      	<li class="nav-item active">
+			        	<a class="nav-link" href="UserProfile">Profile</a>
+			      	</li>
+			      	<li class="nav-item dropdown">
+			        	<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Settings</a>
+			        	<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+			          		<a class="dropdown-item" href="EditProfile">Edit Profile</a>
+			          		<a class="dropdown-item" href="ChangePassword">Change Password</a>
+			        	</div>
+			      	</li>
+			      	<li class="nav-item">
+			        	<a class="nav-link" href="UserLogout">Logout</a>
+			      	</li>
+			    </ul>
+		  	</div>
+		</div>
+	</div>
+  
+
     <div style="margin-left: 8%; margin-right:8%; margin-top:1%; margin-bottom: 3%;">
-      <h1>Song Detail</h1>
-      
-      <!-- Success/Warning Message for creating playlist -->
-      <div class="pricing-header px-3 py-3 pb-md-4 mx-auto">
-		  <!--  Success Message -->
-		  <div class="alert alert-success" <c:if test=
-		  	"${ messages.createPlaylistSucceed == null || not (messages.createPlaylistSucceed)}">style="display:none"</c:if>> 
-		  	<h5 class="alert-heading"> Playlist <em>${createdPlaylistName}</em> created successfully! </h5>
-		  </div>
-		  
-		  <% System.out.println("disableNameWarning: "+ request.getAttribute("messages")); %>
-		  <!-- Warning Message if the entered playlist name already exists or name is empty-->
-		  <div class="alert alert-warning" <c:if test=
-		  	"${messages.disableNameWarning == null || messages.disableNameWarning}">style="display:none"</c:if>> 
-			<% System.out.println(request.getAttribute("messages")); %>
-			<c:choose>
-				<%-- <c:when test="${messages.nameWarningType !=null && messages.nameWarningType.equals(\"empty\")}">
-					<h5 class="alert-heading">Failed to create playlist! </h5>
-					<p style="margin-bottom: 0;">
-						Please enter a <strong>non-empty</strong> name.
-					</p>
-				</c:when> --%>
-				<c:when test="${messages.nameWarningType !=null && messages.nameWarningType.equals(\"duplicate\")}">
-					<h5 class="alert-heading">Failed to create playlist! </h5>
-					<p style="margin-bottom: 0;">You already have a playlist named: "${duplicatePlaylistName}".
-						<strong>Please enter a different playlist name.</strong>  
-					</p>
-				</c:when>
-				<c:otherwise>
-				</c:otherwise>
-			</c:choose>
-		  </div>
-	  </div>
-	  
-	  <!-- Success/Failure Msg for adding to playlist -->
-	  <div class="pricing-header px-3 py-3 pb-md-4 mx-auto" <c:if test="${messages.addToPlaylistSucceed == null} ">style="display:none"</c:if>>
-	  	  <!--  Success Message -->
-		  <div class="alert alert-success" <c:if test=
-		  	"${ messages.addToPlaylistSucceed == null || not (messages.addToPlaylistSucceed)}">style="display:none"</c:if>> 
-		  	<h5 class="alert-heading"> ${messages.addToPlaylistMsg}  </h5>
-		  </div>
-	  	  <!-- Failure Message if the song is already in the playlist -->
-	   	  <div class="alert alert-warning" <c:if test=
-		  	"${ messages.addToPlaylistSucceed == null || messages.addToPlaylistSucceed}">style="display:none"</c:if>> 
-		  	<h5 class="alert-heading"> ${messages.addToPlaylistMsg}  </h5>
-		  </div>
-	  </div>
+      <h1>Song: ${songInfo.getSongName()}</h1>
 	  
       <!-- Song Detail Table -->
-      <table class="table">
+      <table class="table" style="margin-bottom: 0">
         <thead>
           <tr>
             <th scope="col">Song Title</th>
@@ -115,7 +96,7 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
             <td>
 	          	<div class="dropdown">
 				  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
-				    Choose Playlist:
+				    Select Playlist:
 				  </button>
 				  <ul class="dropdown-menu" aria-labelledby="dropdownMenu2" id="playlist-ul" playlists="${playlists}">
 				    <!-- Button trigger "Create New Playlist" modal -->
@@ -140,6 +121,55 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
           </tr>
         </tbody>
       </table>
+
+
+ 	  <!-- Success/Warning Message for creating playlist -->
+      <div class="pricing-header px-3 py-3 mx-auto">
+		  <!--  Success Message -->
+		  <div class="alert alert-success" <c:if test=
+		  	"${ messages.createPlaylistSucceed == null || not (messages.createPlaylistSucceed)}">style="display:none; height:0;"</c:if>> 
+		  	<h5 class="alert-heading"> Playlist <em>${createdPlaylistName}</em> created successfully! </h5>
+		  	<p>To add this song to the playlist, select <em>${createdPlaylistName}</em> in the drop-down menu.</p>
+		  </div>
+		  
+		  <% System.out.println("disableNameWarning: "+ request.getAttribute("messages")); %>
+		  <!-- Warning Message if the entered playlist name already exists-->
+		  <div class="alert alert-warning" <c:if test=
+		  	"${messages.disableNameWarning == null || messages.disableNameWarning}">style="display:none; height:0;"</c:if>> 
+			<% System.out.println(request.getAttribute("messages")); %>
+			<c:choose>
+				<%-- <c:when test="${messages.nameWarningType !=null && messages.nameWarningType.equals(\"empty\")}">
+					<h5 class="alert-heading">Failed to create playlist! </h5>
+					<p style="margin-bottom: 0;">
+						Please enter a <strong>non-empty</strong> name.
+					</p>
+				</c:when> --%>
+				<c:when test="${messages.nameWarningType !=null && messages.nameWarningType.equals(\"duplicate\")}">
+					<h5 class="alert-heading">Failed to create playlist! </h5>
+					<p style="margin-bottom: 0;">You already have a playlist named: "${duplicatePlaylistName}".
+						<strong>Please enter a different playlist name.</strong>  
+					</p>
+				</c:when>
+				<c:otherwise>
+				</c:otherwise>
+			</c:choose>
+		  </div>
+	  </div>
+	  
+	  <!-- Success/Failure Msg for adding to playlist -->
+	  <div class="pricing-header px-3 py-3 mx-auto" <c:if test="${messages.addToPlaylistSucceed == null} ">style="display:none; height:0;"</c:if>>
+	  	  <!--  Success Message -->
+		  <div class="alert alert-success" <c:if test=
+		  	"${ messages.addToPlaylistSucceed == null || not (messages.addToPlaylistSucceed)}">style="display:none; height:0;"</c:if>> 
+		  	<h5 class="alert-heading"> ${messages.addToPlaylistMsg}  </h5>
+		  </div>
+	  	  <!-- Failure Message if the song is already in the playlist -->
+	   	  <div class="alert alert-warning" <c:if test=
+		  	"${ messages.addToPlaylistSucceed == null || messages.addToPlaylistSucceed}">style="display:none; height:0;"</c:if>> 
+		  	<h5 class="alert-heading"> ${messages.addToPlaylistMsg}  </h5>
+		  </div>
+	  </div>
+	  
 
       <!-- Comments -->
       <h1>Comments</h1>
