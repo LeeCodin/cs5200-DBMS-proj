@@ -75,24 +75,19 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
           <tr>
             <th scope="col">Song Title</th>
             <th scope="col">Artist Name</th>
-            <!-- <th scope="col">Artist Country</th> -->
             <th scope="col">Album</th>
             <th scope="col">Year</th>
-            <!-- <th scope="col">Release Date</th> -->
             <th scope="col" style="width:8rem;">Likes</th>
             <th>Add To Playlist</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-           <% System.out.println("Render table before songInfo.getSongName()"); %>
             <td>${songInfo.getSongName()}</td>
-            <% System.out.println("Render table after songInfo.getSongName()"); %>
-            <td>${songInfo.getArtist().getArtistName()}</td>
-            <%-- <td>${songInfo.getArtist().getArtistCountry()}</td> --%>
-            <td>${songInfo.getAlbum().getName()}</td>
+            <td><a href="ArtistDetail?artistId=<c:out value="${songInfo.getArtist().getArtistId()}"/>"><c:out value="${songInfo.getArtist().getArtistName()}" /></a></td>
+            <td><a href="AlbumDetail?albumId=<c:out value="${songInfo.getAlbum().getAlbumId()}"/>"><c:out value="${songInfo.getAlbum().getName()}" /></a></td>
             <td>${songInfo.getAlbum().getYear()}</td>
-            <%-- <td>${songInfo.getAlbum().getReleaseDate()}</td> --%>
+            
             <td>
             	<div class="d-flex align-items-center">
             		<div style="margin-right:1rem;">
