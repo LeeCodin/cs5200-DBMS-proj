@@ -51,43 +51,40 @@
 			    }
 		    </script>
 		<% } else { %>
+			<% String[] inputs = (String[]) request.getAttribute("inputs"); %>
 			<div class="mt-2 container">
 				<form action="EditProfile" method="post">
 					<div class="form-group">
-						<label for="firstName" class="row">First Name: </label>
-						<input id="firstName" class="row col-6" name="firstName"
-							value="${user.getFirstName()}" />
-						<p id="alertFirstName" style="color: red">${alerts.firstName}</p>
+						<label for="firstName" class="row">First Name:<span class="ml-2 text-danger">&#42;</span></label>
+						<input id="firstName" class="row col-6" name="firstName" value="${inputs[0]}" />
+						<div class="row" id="alertFirstName" style="color: red">${alerts.firstName}</div>
 					</div>
 					<div class="form-group">
-						<label for="lastName" class="row">Last Name: </label>
-						<input id="lastName" class="row col-6" name="lastName"
-							value="${user.getLastName()}" />
-						<p id="alertLastName" style="color: red">${alerts.lastName}</p>
+						<label for="lastName" class="row">Last Name:<span class="ml-2 text-danger">&#42;</span></label>
+						<input id="lastName" class="row col-6" name="lastName" value="${inputs[1]}" />
+						<div class="row" id="alertLastName" style="color: red">${alerts.lastName}</div>
 					</div>
 					<div class="form-group">
-						<label for="email" class="row">Email: </label>
-						<input id="email" class="row col-6" name="email"
-							value="${user.getEmail()}" />
-						<p id="alertEmail" style="color: red">${alerts.email}</p>
+						<label for="email" class="row">Email:<span class="ml-2 text-danger">&#42;</span></label>
+						<input id="email" class="row col-6" name="email" value="${inputs[2]}" />
+						<div class="row" id="alertEmail" style="color: red">${alerts.email}</div>
 					</div>
 					<div class="form-group">
-						<label for="avatar" class="row">Avatar: </label>
-						<input id="avatar" class="row col-6" name="avatar"
-							value="${user.getAvatar()}" />
-						<p id="alertAvatar" style="color: red">${alerts.avatar}</p>
+						<label for="avatar" class="row">Avatar:<span class="ml-2 text-danger">&#42;</span></label>
+						<input id="avatar" class="row col-6" name="avatar" value="${inputs[3]}" />
+						<div class="row" id="alertAvatar" style="color: red">${alerts.avatar}</div>
 					</div>
 					<div class="form-group">
-						<label for="bio" class="row">Bio: </label>
-						<input id="bio" class="row col-6" name="bio"
-							value="${user.getBio()}" />
-						<p id="alertBio" style="color: red">${alerts.bio}</p>
+						<label for="bio" class="row">Bio:</label>
+						<input id="bio" class="row col-6" name="bio" value="${inputs[4]}" />
 					</div>
 					<div class="form-group">
-						<label for="bornDate" class="row">Born Date: </label>
-						<input id="bornDate" class="row col-6" name="bornDate"
-							value="${user.getBornDateStr()}" />
-						<p id="alertBornDate" style="color: red">${alerts.bornDate}</p>
+						<label for="bornDate" class="row">Born Date:<span class="ml-2 text-danger">&#42;</span></label>
+						<input id="bornDate" class="row col-6" name="bornDate" value="${inputs[5]}" />
+						<div class="row" id="alertBornDate" style="color: red">${alerts.bornDate}</div>
+					</div>
+					<div class="form-group">
+						<div class="row text-secondary">Fields marked with an <span class="ml-2 mr-2 text-danger">&#42;</span> are required.</div>
 					</div>
 					<div class="form-group">
 						<button type="submit" class="btn btn-primary row col-6">Save</button>
