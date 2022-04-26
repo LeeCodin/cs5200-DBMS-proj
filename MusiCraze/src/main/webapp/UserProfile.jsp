@@ -81,6 +81,7 @@
 		<% } else { %>
 			<% Guests guest = (Guests) request.getAttribute("guest"); %>
 			<% if (guest != null) { %>
+				<% System.out.println("Render guest!"); %>
 				<div class="mt-2 container">
 					<div class="row mt-2">
 						<div class="col-12">
@@ -103,10 +104,55 @@
 		                  	<img class="card-img-top avatar float-right" src="<%=guest.getAvatar() %>">
 		                </div>
 	              	</div>
-					<!-- TODO: Display guest's playlist -->
+					<!--  Display guest's playlist -->
+					<div style="display:flex; flex-wrap: wrap;align-items:center;justify-content: space-around">
+						<h3 class="text-center">${guest.getUserName()}'s Playlists</h3>
+					</div>
+<%-- 					<div
+						<c:if test="${messages.disableMessage==null || messages.disableMessage==true}">style="display:none"</c:if>
+						<c:if test="${messages.isSuccessful}">class="alert alert-success"</c:if>
+						<c:if test="${!(messages.isSuccessful)}">class="alert alert-danger"</c:if>
+					>
+						<c:out value="${messages.title}"/>
+					</div> --%>
+					
+					<table class="table table-striped table-hover">
+					  <thead class="thead-dark">
+					    <tr>
+					      <th scope="col">Playlist Name</th>
+					      <th scope="col">Description </th>
+					      <th scope="col">Create Date</th>
+					      <th scope="col">Latest Update Date</th>
+		     			  <!-- <th scope="col"></th> -->
+					    </tr>
+					  </thead>
+					  <tbody>
+					    <c:forEach items="${playlists}" var="playlist">
+					      <tr>
+					    	<td>
+					    		<a href="PlaylistSongsDisplay?playlistId=<c:out value="${playlist.getPlaylistId()}"/>&username=<c:out value="${guest.getUserName()}"/>">
+					    		<c:out value="${playlist.getPlaylistName()}" /></a></td>
+					    	<td><c:out value="${playlist.getDescription()}" /></td>
+					    	<td><c:out value="${playlist.getCreatedAt()}" /></td>
+					    	<td><c:out value="${playlist.getUpdatedAt()}" /></td>
+					    	<%-- <td>
+					    		<form action="UserProfile" method="post">
+					    		  <span style="display: none">
+					    		  	<input name="playlistId" value="${playlist.getPlaylistId()}"/>
+					    		  </span>
+					    		  <input class="delete" type="submit" value="Delete" />
+					    		 
+					    		</form>
+					    	</td> --%>
+					      </tr>
+					    </c:forEach>
+					    
+					  </tbody>
+					</table>
 					
 				</div>			
 			<% } else { %>
+				<% System.out.println("Render user!"); %>
 				<div class="mt-2 container">
 					<div class="row mt-2">
 		                <div class="col-12">
@@ -133,7 +179,7 @@
 	              	</div>
 					
 					<div style="display:flex; flex-wrap: wrap;align-items:center;justify-content: space-around">
-						<h1 class="text-center">My Playlists</h1>
+						<h3 class="text-center">My Playlists</h3>
 						<a href="PlaylistCreate" class="btn btn-primary" role="button" aria-pressed="true" style="height:1.75rem;font-size:1.25rem;line-height:1rem">
 							+ Add New Playlist</a>	
 					</div>
@@ -148,7 +194,7 @@
 					<table class="table table-striped table-hover">
 					  <thead class="thead-dark">
 					    <tr>
-					      <th scope="col">Playlist Id</th>
+					      <!-- <th scope="col">Playlist Id</th> -->
 					      <th scope="col">Playlist Name</th>
 					      <th scope="col">Description </th>
 					      <th scope="col">Create Date</th>
@@ -162,7 +208,7 @@
 					    <c:forEach items="${playlists}" var="playlist">
 					      <tr>
 					        <!-- <th scope="row">2</th> -->
-					        <th scope="row"><c:out value="${playlist.getPlaylistId()}" /></th>
+					        <%-- <th scope="row"><c:out value="${playlist.getPlaylistId()}" /></th> --%>
 					    	<%-- <td><c:out value="${playlist.getPlaylistId()}" /></td> --%>
 					    	<td><a href="PlaylistSongsDisplay?playlistId=<c:out value="${playlist.getPlaylistId()}"/>"><c:out value="${playlist.getPlaylistName()}" /></a></td>
 					    	<td><c:out value="${playlist.getDescription()}" /></td>

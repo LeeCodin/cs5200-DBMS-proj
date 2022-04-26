@@ -17,11 +17,13 @@ import javax.servlet.http.HttpServletResponse;
 public class UserProfile extends HttpServlet {
 
   private GuestsDao guestsDao;
+  private UsersDao usersDao;
   protected PlaylistsDao playlistsDao;
 
   @Override
   public void init() throws ServletException {
     this.guestsDao = GuestsDao.getInstance();
+    this.usersDao = UsersDao.getInstance();
     this.playlistsDao = PlaylistsDao.getInstance();
   }
 
@@ -34,6 +36,7 @@ public class UserProfile extends HttpServlet {
       return;
     }
     String username = req.getParameter("username");
+    System.out.println("username: " + username);
     Boolean isOwner = username == null || username.equals(user.getUserName());
     try {
       if (isOwner) {
@@ -42,8 +45,10 @@ public class UserProfile extends HttpServlet {
       } else {
         Guests guest = this.guestsDao.getGuestByUserName(username);
         req.setAttribute("guest", guest);
-        // TODO: Retrieve guest's playlist by username;
-
+        
+        Users guestUser = this.usersDao.getUserByUserName(username);
+        List<Playlists> playlists = this.playlistsDao.getPlaylistsForUser(guestUser);
+        req.setAttribute("playlists", playlists);
       }
     } catch (SQLException ignored) {
     }
@@ -61,22 +66,31 @@ public class UserProfile extends HttpServlet {
     String playlistIdStr = req.getParameter("playlistId");
     int playlistId = Integer.parseInt(playlistIdStr);
 
-    Playlists playlist = new Playlists(playlistId);
+    Playlists playlist = null;
+    try {
+      playlist = playlistsDao.getPlaylistById(playlistId);
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new IOException(e);
+    }
+    
+    String playlistName = playlist.getPlaylistName();
+    
     try {
       playlist = playlistsDao.delete(playlist);
 
       if (playlist == null) {
-        messages.put("title", "Successfully deleted playlist#" + playlistId);
+        messages.put("title", "Successfully deleted playlist: \"" + playlistName + "\"");
         messages.put("isSuccessful", "true");
         messages.put("disableMessage", "false");
       } else {
-        messages.put("title", "Failed to delete playlist#" + playlistId);
+        messages.put("title", "Failed to delete playlist: \"" + playlistName + "\"");
         messages.put("isSuccessful", "false");
         messages.put("disableMessage", "false");
       }
     } catch (SQLException e) {
       e.printStackTrace();
-      messages.put("title", "Failed to delete playlist#" + playlistId);
+      messages.put("title", "Failed to delete playlist: \"" + playlistName + "\"");
     }
     doGet(req, res);
   }

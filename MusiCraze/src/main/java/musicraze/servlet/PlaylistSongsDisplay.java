@@ -20,6 +20,7 @@ public class PlaylistSongsDisplay extends HttpServlet{
 	protected PlaylistSongContainsDao playlistSongContainsDao;
 	protected PlaylistsDao playlistsDao;
 	protected SongsDao songsDao;
+	protected GuestsDao guestsDao;
 	
 	
     @Override
@@ -27,13 +28,14 @@ public class PlaylistSongsDisplay extends HttpServlet{
     	playlistSongContainsDao = PlaylistSongContainsDao.getInstance();
     	playlistsDao = PlaylistsDao.getInstance();
     	songsDao = SongsDao.getInstance();
-    	
+    	guestsDao = GuestsDao.getInstance();
     }
     
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse res) 
     	throws ServletException, IOException {
     	String playlistIdStr = req.getParameter("playlistId");
+    	System.out.println("playlistIdStr: "+ playlistIdStr);
     	int playlistId = Integer.parseInt(playlistIdStr);
     	
     	req = getRenderPlaylistInfo(req, playlistId); 
@@ -41,7 +43,26 @@ public class PlaylistSongsDisplay extends HttpServlet{
     	Map<String, String> messages = new HashMap<String, String>();
         req.setAttribute("messages", messages);
         messages.put("disableMessage", "true");
-
+        
+        
+        // Check if the playlist owner is the current logged-in user.
+        Users user = (Users) (req.getSession().getAttribute("user"));
+        if (user == null) {
+          res.sendRedirect("UserLogin");
+          return;
+        }
+        String username = req.getParameter("username");
+        System.out.println("username: " + username);
+        Boolean isOwner = username == null || username.equals(user.getUserName());
+        try {
+          if (!isOwner) {
+            Guests guest = this.guestsDao.getGuestByUserName(username);
+            req.setAttribute("guest", guest);
+            System.out.println("guest: " + guest.getUserName());
+          }
+        } catch (SQLException ignored) {
+        }
+        
     	req.getRequestDispatcher("/PlaylistSongsDisplay.jsp").forward(req, res);
     }
     
