@@ -40,7 +40,7 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
             			<td><a href="ArtistDetail?artistId=<c:out value="${songInfo.getArtist().getArtistId()}"/>"><c:out value="${songInfo.getArtist().getArtistName()}" /></a></td>
             			<td>${songInfo.getAlbum().getName()}</td>
             			<td>${songInfo.getAlbum().getYear()}</td>
-            			<td>/</td>
+            			<td>${songInfo.getLikesCount()}</td>
             			<td>/</td>
 					</tr>
 				</c:forEach>

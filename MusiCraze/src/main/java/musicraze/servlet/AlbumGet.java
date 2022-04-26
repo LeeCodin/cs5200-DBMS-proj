@@ -19,6 +19,7 @@ public class AlbumGet extends HttpServlet {
 	
 	protected AlbumsDao albumsDao;
 	protected SongsDao songsDao;
+	protected LikesDao likesDao;
 	protected List<Songs> songs;
 	protected Albums album;
 	protected Users user;
@@ -27,6 +28,7 @@ public class AlbumGet extends HttpServlet {
 	public void init() throws ServletException {
 		albumsDao = AlbumsDao.getInstance();
 		songsDao = SongsDao.getInstance();
+		likesDao = LikesDao.getInstance();
 	}
 	
 	@Override
@@ -51,7 +53,11 @@ public class AlbumGet extends HttpServlet {
         } else {
         	try {
         	album = albumsDao.getAlbumById(Integer.valueOf(albumId));
-        	songs = songsDao.getSongsByAlbumId(album.getAlbumId()); 
+        	songs = songsDao.getSongsByAlbumId(album.getAlbumId());
+        	for(Songs song: songs) {
+        		int likesCount = likesDao.getLikesBySongId(Integer.valueOf(song.getSongId())).size();
+        		song.setLikesCount(likesCount);
+        	}
         	}
         	catch (SQLException e) {
     			e.printStackTrace();
@@ -59,6 +65,10 @@ public class AlbumGet extends HttpServlet {
             }
         	messages.put("success", "Displaying albumInfo for " + albumId);
         }
+        
+        
+
+        
         req.setAttribute("albumInfo", album);
         req.setAttribute("songsInfo", songs);
         req.getRequestDispatcher("/AlbumDetail.jsp").forward(req, resp);
