@@ -61,22 +61,31 @@ public class UserProfile extends HttpServlet {
     String playlistIdStr = req.getParameter("playlistId");
     int playlistId = Integer.parseInt(playlistIdStr);
 
-    Playlists playlist = new Playlists(playlistId);
+    Playlists playlist = null;
+    try {
+      playlist = playlistsDao.getPlaylistById(playlistId);
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new IOException(e);
+    }
+    
+    String playlistName = playlist.getPlaylistName();
+    
     try {
       playlist = playlistsDao.delete(playlist);
 
       if (playlist == null) {
-        messages.put("title", "Successfully deleted playlist#" + playlistId);
+        messages.put("title", "Successfully deleted playlist: \"" + playlistName + "\"");
         messages.put("isSuccessful", "true");
         messages.put("disableMessage", "false");
       } else {
-        messages.put("title", "Failed to delete playlist#" + playlistId);
+        messages.put("title", "Failed to delete playlist: \"" + playlistName + "\"");
         messages.put("isSuccessful", "false");
         messages.put("disableMessage", "false");
       }
     } catch (SQLException e) {
       e.printStackTrace();
-      messages.put("title", "Failed to delete playlist#" + playlistId);
+      messages.put("title", "Failed to delete playlist: \"" + playlistName + "\"");
     }
     doGet(req, res);
   }

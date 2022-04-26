@@ -15,7 +15,23 @@
 </head>
 
 <body>
-	<h1 class="display-5">Update Playlist #${playlistId} Info:</h1>
+	<h1 class="display-5">Update Playlist Info:</h1>
+	
+	<div class="alert alert-success" <c:if test="${messages.disableSuccess}">style="display:none"</c:if>> 
+	  <h5 class="alert-heading"> Playlist Info updated successfully! </h5>
+	 </div>
+	  
+	  
+	<!-- Warning Message if the entered playlist name already exists -->
+	<div class="alert alert-warning" <c:if test="${messages.disableSameNameWarning}">style="display:none"</c:if>> 
+		
+		<h5 class="alert-heading">Duplicate playlist name: </h5>
+			<p>You already have a playlist named: "${duplicatePlaylistName}".
+		   <strong>Please enter a different playlist name.</strong>  </p>
+	</div>
+	  
+	
+	
 	<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
 	  
 	  	<h2 class="display-5">Playlist Name: ${playlistName}</h2>

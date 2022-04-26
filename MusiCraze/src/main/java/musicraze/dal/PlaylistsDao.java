@@ -352,6 +352,54 @@ public class PlaylistsDao {
 		return playlists;
 	}
 	
+	
+	// Assumption: For the same user, there're can't be 2 playlists with the same name.
+	// Scenario: When a user wants to create a new playlist,
+	// this method is used to check if the user already has an existing playlist with the same name.
+	// If yes, then user cannot create a new playlist with this name.
+	// (Invoked in servlet/PlaylistCreate.java, doPost)
+	public Playlists getPlaylistByNameForUser(String playlistName, Users user) throws SQLException {
+		String selectPlaylist = 
+				"SELECT PlaylistId, UserName, PlaylistName, Description, CreatedAt, UpdatedAt " +
+				"FROM Playlists " + 
+				"WHERE PlaylistName=? AND UserName=?";
+		
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		try {
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectPlaylist);
+			selectStmt.setString(1, playlistName);
+			selectStmt.setString(2, user.getUserName());
+			results = selectStmt.executeQuery();
+			
+			if (results.next()) {
+				int playlistId = results.getInt("PlaylistId");
+				String description = results.getString("Description");
+				Date createdAt = new Date(results.getTimestamp("CreatedAt").getTime());
+				Date updatedAt = new Date(results.getTimestamp("UpdatedAt").getTime());
+				
+				Playlists playlist = new Playlists(playlistId, user, playlistName,
+						description, createdAt, updatedAt);
+				return playlist;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return null;
+	}
 
 	
 }

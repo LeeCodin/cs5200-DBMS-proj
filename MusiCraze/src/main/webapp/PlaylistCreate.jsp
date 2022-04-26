@@ -16,13 +16,25 @@
 
 <body>
 	<h1 class="display-5">Create New Playlist:</h1>
+	
 	<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center"
 		<c:if test="${messages.disableDisplayInfo}">style="display:none"</c:if>
 	>
+	  <div class="alert alert-success"> 
+	  	<h5 class="alert-heading"> Playlist created successfully! </h5>
+	  </div>
 	  <h2 class="display-5">Playlist Name: ${createdPlaylistName}</h2>
       <p class="lead"><strong>Description: </strong><br/>${createdDescription}</p>
 	</div> 
 	
+	
+	<!-- Warning Message if the entered playlist name already exists -->
+	<div class="alert alert-warning" <c:if test="${messages.disableSameNameWarning}">style="display:none"</c:if>> 
+		
+		<h5 class="alert-heading">Duplicate playlist name: </h5>
+			<p>You already have a playlist named: "${duplicatePlaylistName}".
+		   <strong>Please enter a different playlist name.</strong>  </p>
+	</div>
 	
 	<form action="PlaylistCreate" method="post" class="text-center"
 		<c:if test="${messages.disableInput}">style="display:none"</c:if>
@@ -50,7 +62,7 @@
 		
 	  	<br/>
 	  	<div>
-	    	<input class="btn btn-primary" type="submit" value="Update"/>
+	    	<input class="btn btn-primary" type="submit" value="Create"/>
 	    	<a href="UserProfile"
        			class="btn btn-outline-secondary" role="button" aria-pressed="true">
        			Back to See All Playlists

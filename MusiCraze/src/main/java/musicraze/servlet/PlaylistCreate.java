@@ -32,6 +32,7 @@ public class PlaylistCreate extends HttpServlet{
         req.setAttribute("messages", messages);
         messages.put("disableDisplayInfo", "true");
         messages.put("disableInput", "false");
+        messages.put("disableSameNameWarning", "true");
 
     	req.getRequestDispatcher("/PlaylistCreate.jsp").forward(req, res);
     }
@@ -50,20 +51,55 @@ public class PlaylistCreate extends HttpServlet{
         }
     	
         String playlistName = req.getParameter("newPlaylistName");
+        System.out.println("playlistName: "+ playlistName);
         String description = req.getParameter("newDescription");
-        Playlists playlist = new Playlists(user, playlistName, description);
+        
+        // Check if the user already has an existing playlist with the same name.
+        Playlists sameNamePlaylist = null;
+        
         try {
-			playlist = playlistsDao.create(playlist);
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new IOException(e);
+			sameNamePlaylist = playlistsDao.getPlaylistByNameForUser(playlistName, user);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+			throw new IOException(e1);
 		}
         
-        req.setAttribute("createdPlaylistName", playlistName);
-        req.setAttribute("createdDescription", description);
+		if (sameNamePlaylist == null) {
+			Playlists playlist = new Playlists(user, playlistName, description);
+			try {
+				playlist = playlistsDao.create(playlist);
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new IOException(e);
+			}
+		        
+	        req.setAttribute("createdPlaylistName", playlistName);
+	        req.setAttribute("createdDescription", description);
+	        
+	        messages.put("disableDisplayInfo", "false");
+	        messages.put("disableInput", "true");
+	        messages.put("disableSameNameWarning", "true");
+			
+		} else {
+			req.setAttribute("duplicatePlaylistName", playlistName);
+			messages.put("disableDisplayInfo", "true");
+			messages.put("disableInput", "false");
+			messages.put("disableSameNameWarning", "false");
+		}
         
-        messages.put("disableDisplayInfo", "false");
-        messages.put("disableInput", "true");
+//        Playlists playlist = new Playlists(user, playlistName, description);
+//        try {
+//			playlist = playlistsDao.create(playlist);
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//			throw new IOException(e);
+//		}
+//        
+//        req.setAttribute("createdPlaylistName", playlistName);
+//        req.setAttribute("createdDescription", description);
+//        
+//        messages.put("disableDisplayInfo", "false");
+//        messages.put("disableInput", "true");
         
         req.getRequestDispatcher("/PlaylistCreate.jsp").forward(req, res);
     }

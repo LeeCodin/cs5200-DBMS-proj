@@ -81,6 +81,7 @@
 		<% } else { %>
 			<% Guests guest = (Guests) request.getAttribute("guest"); %>
 			<% if (guest != null) { %>
+				<% System.out.println("Render guest!"); %>
 				<div class="mt-2 container">
 					<div class="row mt-2">
 						<div class="col-12">
@@ -107,6 +108,7 @@
 					
 				</div>			
 			<% } else { %>
+				<% System.out.println("Render user!"); %>
 				<div class="mt-2 container">
 					<div class="row mt-2">
 		                <div class="col-12">
