@@ -20,7 +20,7 @@
 
 	
 	<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-      <h2 class="display-5">Playlist #${playlistId}: ${playlistName}</h2>
+      <h2 class="display-5">Playlist: ${playlistName}</h2>
       <p class="lead"><strong>Description: </strong><br/>${description}</p>
       <a href="PlaylistUpdateInfo?playlistId=<c:out value="${playlistId}"/>"
        class="btn btn-primary" role="button" aria-pressed="true"

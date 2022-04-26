@@ -150,7 +150,7 @@
 					<table class="table table-striped table-hover">
 					  <thead class="thead-dark">
 					    <tr>
-					      <th scope="col">Playlist Id</th>
+					      <!-- <th scope="col">Playlist Id</th> -->
 					      <th scope="col">Playlist Name</th>
 					      <th scope="col">Description </th>
 					      <th scope="col">Create Date</th>
@@ -164,7 +164,7 @@
 					    <c:forEach items="${playlists}" var="playlist">
 					      <tr>
 					        <!-- <th scope="row">2</th> -->
-					        <th scope="row"><c:out value="${playlist.getPlaylistId()}" /></th>
+					        <%-- <th scope="row"><c:out value="${playlist.getPlaylistId()}" /></th> --%>
 					    	<%-- <td><c:out value="${playlist.getPlaylistId()}" /></td> --%>
 					    	<td><a href="PlaylistSongsDisplay?playlistId=<c:out value="${playlist.getPlaylistId()}"/>"><c:out value="${playlist.getPlaylistName()}" /></a></td>
 					    	<td><c:out value="${playlist.getDescription()}" /></td>
