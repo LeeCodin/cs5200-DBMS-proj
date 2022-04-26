@@ -19,6 +19,7 @@ public class ArtistGet extends HttpServlet {
 	
 	protected ArtistsDao artistDao;
 	protected SongsDao songsDao;
+	protected LikesDao likesDao;
 	protected Artists artist;
 	protected List<Songs> songs;
 	protected Users user;
@@ -27,6 +28,7 @@ public class ArtistGet extends HttpServlet {
 	public void init() throws ServletException {
 		artistDao = ArtistsDao.getInstance();
 		songsDao = SongsDao.getInstance();
+		likesDao = LikesDao.getInstance();
 	}
 	
 	@Override
@@ -52,6 +54,10 @@ public class ArtistGet extends HttpServlet {
         	try {
         	artist = artistDao.getArtistById(Integer.valueOf(artistId));
         	songs = songsDao.getSongsByArtistId(Integer.valueOf(artistId)); 
+        	for(Songs song: songs) {
+        		int likesCount = likesDao.getLikesBySongId(song.getSongId()).size();
+        		song.setLikesCount(likesCount);
+        	}
         	}
         	catch (SQLException e) {
     			e.printStackTrace();
