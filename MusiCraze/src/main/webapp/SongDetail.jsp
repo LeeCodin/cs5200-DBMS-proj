@@ -38,9 +38,8 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
         <tbody>
           <tr>
             <td>${songInfo.getSongName()}</td>
-            <td>${songInfo.getArtist().getArtistName()}</td>
-            <%-- <td>${songInfo.getArtist().getArtistCountry()}</td> --%>
-            <td>${songInfo.getAlbum().getName()}</td>
+            <td><a href="ArtistDetail?artistId=<c:out value="${songInfo.getArtist().getArtistId()}"/>"><c:out value="${songInfo.getArtist().getArtistName()}" /></a></td>
+            <td><a href="AlbumDetail?albumId=<c:out value="${songInfo.getAlbum().getAlbumId()}"/>"><c:out value="${songInfo.getAlbum().getName()}" /></a></td>
             <td>${songInfo.getAlbum().getYear()}</td>
             <%-- <td>${songInfo.getAlbum().getReleaseDate()}</td> --%>
             <td>

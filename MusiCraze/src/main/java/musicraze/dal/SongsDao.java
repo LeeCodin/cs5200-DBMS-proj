@@ -16,6 +16,15 @@ public class SongsDao {
     private static final String INSERT = "INSERT INTO Songs(SongName, ArtistId, AlbumId) VALUES(?,?,?);";
     private static final String GETBYSONGID = "SELECT * FROM Songs INNER JOIN Artists ON Songs.artistId = Artists.artistId WHERE SongId = ?;";
     private static final String GETBYSONGNAME = "SELECT * FROM Songs INNER JOIN Artists ON Songs.artistId = Artists.artistId WHERE SongName = ?;";
+    private static final String GETBYALBUMID = "SELECT * FROM Songs WHERE AlbumId = ?;";
+    private static final String GETBYARTISTID = "SELECT * FROM \r\n"
+    		+ "	Songs INNER JOIN ( SELECT Songs.SongId AS SongId, COUNT(Likes.LikeId) AS CNT FROM Songs INNER JOIN Likes ON Songs.SongId = Likes.SongId"
+    		+ "    WHERE ArtistId = ?"
+    		+ "    GROUP BY SongId"
+    		+ "    ORDER BY CNT DESC) AS like_table"
+    		+ " ON Songs.SongId = like_table.SongId"
+    		+ " ORDER BY like_table.CNT DESC"
+    		+ " LIMIT 10; ";
     private static final String DELETE = "DELETE FROM Songs WHERE SongId = ?;";
     private static final String UPDATE_SONGNAME = "UPDATE Songs SET SongName = ? WHERE SongId = ?;";
     private static final String UPDATE_ARTISTID = "UPDATE Songs SET ArtistId = ? WHERE SongId = ?;";
@@ -156,6 +165,90 @@ public class SongsDao {
         return songs;
     }
 
+    
+    public List<Songs> getSongsByAlbumId(Integer albumId) throws SQLException {
+        List<Songs> songs = new ArrayList<Songs>();
+        Connection connection = null;
+        PreparedStatement selectStmt = null;
+        ResultSet results = null;
+        try {
+            connection = this.connectionManager.getConnection();
+            selectStmt = connection.prepareStatement(GETBYALBUMID);
+            selectStmt.setInt(1, albumId);
+            results = selectStmt.executeQuery();
+            while (results.next()) {
+                Integer resultId = results.getInt("SongId");
+                String songname = results.getString("SongName");
+                Integer artistId = results.getInt("ArtistId");
+                Integer _albumId = results.getInt("AlbumId");
+                AlbumsDao albumsDao = AlbumsDao.getInstance();
+                Albums album = albumsDao.getAlbumById(_albumId);
+
+                ArtistsDao artistsDao = ArtistsDao.getInstance();
+                Artists artist = artistsDao.getArtistById(artistId);
+
+                Songs song = new Songs(resultId, songname, artist, album);
+                songs.add(song);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            if (connection != null) {
+                connection.close();
+            }
+            if (selectStmt != null) {
+                selectStmt.close();
+            }
+            if (results != null) {
+                results.close();
+            }
+        }
+        return songs;
+    }
+    
+    public List<Songs> getSongsByArtistId(Integer artistId) throws SQLException {
+        List<Songs> songs = new ArrayList<Songs>();
+        Connection connection = null;
+        PreparedStatement selectStmt = null;
+        ResultSet results = null;
+        try {
+            connection = this.connectionManager.getConnection();
+            
+            selectStmt = connection.prepareStatement(GETBYARTISTID);
+            selectStmt.setInt(1, artistId);
+            results = selectStmt.executeQuery();
+            while (results.next()) {
+                Integer resultId = results.getInt("SongId");
+                String songname = results.getString("SongName");
+                Integer _artistId = results.getInt("ArtistId");
+                Integer albumId = results.getInt("AlbumId");
+                AlbumsDao albumsDao = AlbumsDao.getInstance();
+                Albums album = albumsDao.getAlbumById(albumId);
+
+                ArtistsDao artistsDao = ArtistsDao.getInstance();
+                Artists artist = artistsDao.getArtistById(_artistId);
+
+                Songs song = new Songs(resultId, songname, artist, album);
+                songs.add(song);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            if (connection != null) {
+                connection.close();
+            }
+            if (selectStmt != null) {
+                selectStmt.close();
+            }
+            if (results != null) {
+                results.close();
+            }
+        }
+        return songs;
+    }
+    
     public Songs updateSongName(Songs songs, String songName) throws SQLException {
         Connection connection = null;
         PreparedStatement insertStmt = null;

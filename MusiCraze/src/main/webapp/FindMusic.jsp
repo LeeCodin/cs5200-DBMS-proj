@@ -59,7 +59,7 @@
 		    </tr>
 		    <c:forEach items="${albums}" var="album" >
 		        <tr>
-		        	<td><c:out value="${album.getName()}" /></td>
+		        	<td><a href="AlbumDetail?albumId=<c:out value="${album.getAlbumId()}"/>"><c:out value="${album.getName()}" /></a></td>
 		        	<td><fmt:formatDate value="${album.getReleaseDate()}" pattern="MM-dd-yyyy"/></td>
 		        	<td><c:out value="${album.getDuration()}" /></td>
 		        		    
@@ -74,7 +74,7 @@
 		    </tr>
 		    <c:forEach items="${artists}" var="artist" >
 		        <tr>
-		            <td><c:out value="${artist.getArtistName()}" /></td>
+		            <td><a href="ArtistDetail?artistId=<c:out value="${artist.getArtistId()}"/>"><c:out value="${artist.getArtistName()}" /></a></td>
 		        </tr>
 		    </c:forEach>
 		</table>
