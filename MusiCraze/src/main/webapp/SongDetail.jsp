@@ -28,7 +28,7 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 			    	<li class="nav-item">
 			        	<a class="nav-link" href="FindMusic">Search</a>
 			      	</li>
-			      	<li class="nav-item active">
+			      	<li class="nav-item">
 			        	<a class="nav-link" href="UserProfile">Profile</a>
 			      	</li>
 			      	<li class="nav-item dropdown">
