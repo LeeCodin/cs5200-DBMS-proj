@@ -57,7 +57,7 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 		            <th scope="col">Album</th>
 		            <th scope="col">Year</th>
 		            <th scope="col" style="width:8rem;">Likes</th>
-		            <th>Add To Playlist</th>				
+		            <!-- <th>Add To Playlist</th>			 -->	
 				</tr>
 			</thead>
 			<tbody>
@@ -68,7 +68,7 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
             			<td><a href="AlbumDetail?albumId=<c:out value="${songInfo.getAlbum().getAlbumId()}"/>"><c:out value="${songInfo.getAlbum().getName()}" /></a></td>
             			<td>${songInfo.getAlbum().getYear()}</td>
             			<td>${songInfo.getLikesCount()} </td>
-            			<td>/</td>
+            			<!-- <td>/</td> -->
 					</tr>
 				</c:forEach>
 			</tbody>
