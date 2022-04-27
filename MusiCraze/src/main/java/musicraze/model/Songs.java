@@ -59,7 +59,4 @@ public class Songs {
 	public void setLikesCount(Integer likesCount) {
 		this.likesCount = likesCount;
 	}
-	
-	
-
 }

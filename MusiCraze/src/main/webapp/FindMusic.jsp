@@ -71,8 +71,7 @@
 		            <td><a href="SongDetail?songId=<c:out value="${song.getSongId()}"/>"><c:out value="${song.getSongName()}" /></a></td>            
 		            <td><c:out value="${song.getArtist().getArtistName()}" /></td>
 		            <td><c:out value="${song.getAlbum().getName()}" /></td>
-		            <td><c:out value="${100}"/></td>
-		
+		            <td><c:out value="${likesDao.getLikesBySongId(song.getSongId()).size()}"/></td>
 		        </tr>
 		    </c:forEach>
 		</table>

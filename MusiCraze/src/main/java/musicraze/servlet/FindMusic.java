@@ -6,6 +6,8 @@ import musicraze.model.*;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,14 +28,18 @@ public class FindMusic extends HttpServlet {
   protected SongsDao songsDao;
   protected ArtistsDao artistsDao;
   protected AlbumsDao albumsDao;
+  protected LikesDao likesDao;
+  
 
   @Override
   public void init() throws ServletException {
     songsDao = SongsDao.getInstance();
     artistsDao = ArtistsDao.getInstance();
     albumsDao = AlbumsDao.getInstance();
+    likesDao = LikesDao.getInstance();
   }
 
+  
   @Override
   public void doGet(HttpServletRequest req, HttpServletResponse resp)
       throws ServletException, IOException {
@@ -50,7 +56,6 @@ public class FindMusic extends HttpServlet {
     List<Songs> songs = new ArrayList<Songs>();
 
     // Retrieve and validate song name.
-    // firstname is retrieved from the URL query string.
     String searchItem = req.getParameter("searchItem");
     if (searchItem == null || searchItem.trim().isEmpty()) {
       messages.put("success", "Please enter a valid song name.");
@@ -101,6 +106,7 @@ public class FindMusic extends HttpServlet {
       // Retrieve users, and store as a message.
       try {
         songs = songsDao.getSongsByName(searchItem);
+        Collections.sort(songs, new SortByLikes());  
         artists = artistsDao.getArtistByName(searchItem);
         albums = albumsDao.getAlbumsFromAlbumName(searchItem);
       } catch (SQLException e) {
@@ -112,6 +118,22 @@ public class FindMusic extends HttpServlet {
     req.setAttribute("songs", songs);
     req.setAttribute("artists", artists);
     req.setAttribute("albums", albums);
+    req.setAttribute("likesDao", likesDao);
     req.getRequestDispatcher("/FindMusic.jsp").forward(req, resp);
   }
 }
+
+class SortByLikes implements Comparator<Songs> {
+	protected LikesDao likesDao = LikesDao.getInstance();
+	// Used for sorting in ascending order of ID  
+	public int compare(Songs s1, Songs s2)  
+	    {  
+			try {
+				return likesDao.getLikesBySongId(s2.getSongId()).size() - likesDao.getLikesBySongId(s1.getSongId()).size();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return 0;
+	    }  
+	}  
