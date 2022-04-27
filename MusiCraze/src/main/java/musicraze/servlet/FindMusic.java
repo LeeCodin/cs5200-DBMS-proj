@@ -58,7 +58,7 @@ public class FindMusic extends HttpServlet {
     // Retrieve and validate song name.
     String searchItem = req.getParameter("searchItem");
     if (searchItem == null || searchItem.trim().isEmpty()) {
-      messages.put("success", "Please enter a valid song name.");
+      messages.put("success", "Please enter a valid keyword.");
     } else {
       // Retrieve songs, and store as a message.
       try {

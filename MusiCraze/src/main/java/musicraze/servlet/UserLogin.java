@@ -55,7 +55,7 @@ public class UserLogin extends HttpServlet {
       }
       req.getSession(true).setAttribute("user", user);
       req.setAttribute("user", user);
-      res.sendRedirect("UserProfile");
+      res.sendRedirect("FindMusic");
     } catch (IllegalArgumentException e) {
       req.setAttribute("alerts", alerts);
       req.getRequestDispatcher("/UserLogin.jsp").forward(req, res);
