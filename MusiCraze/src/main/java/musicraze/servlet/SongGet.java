@@ -124,6 +124,10 @@ public class SongGet extends HttpServlet {
         }
         req.setAttribute("songInfo", song);
         req.setAttribute("commentsInfo", comments);
+        if(comments.size() > 0) {
+            System.out.println("comments time: " + comments.get(0).getCreatedAt().getTime());
+        }
+
         req.setAttribute("usersComments", usersComments);
         req.setAttribute("likesCounts", likes.size());
         req.setAttribute("liked", liked);

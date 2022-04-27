@@ -223,7 +223,7 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
                 <fmt:formatDate value="${comment.getCreatedAt()}" pattern="yyyy-MM-dd" /> 
               </div>
               <div>
-                <fmt:formatDate value="${comment.getCreatedAt()}" pattern="hh:mm" />
+                <fmt:formatDate value="${comment.getCreatedAt()}" pattern="HH:mm" />
               </div>
             </div>
               <div class="card-body">
@@ -263,7 +263,7 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 	                <fmt:formatDate value="${comment.getCreatedAt()}" pattern="yyyy-MM-dd" /> 
 	              </div>
 	              <div>
-	                <fmt:formatDate value="${comment.getCreatedAt()}" pattern="hh:mm" />
+	                <fmt:formatDate value="${comment.getCreatedAt()}" pattern="HH:mm" />
 	              </div>
 	            </div>
 	            <div class="card-body">
