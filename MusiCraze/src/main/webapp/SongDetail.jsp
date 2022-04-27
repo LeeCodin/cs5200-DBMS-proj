@@ -170,28 +170,6 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 		  </div>
 	  </div>
 	  
-	  
-      <!-- Covers -->
-      <h1>Covers List</h1>
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">Cover Name</th>
-            <th scope="col">Performer</th>
-            <th scope="col">YoutubeUrl</th>
-          </tr>
-        </thead>
-        <tbody>
-          <c:forEach items="${covers}" var="cover" >
-          <tr>
-			<td><c:out value="${cover.getCoverName()}" /></td>
-			<td><c:out value="${cover.getPerformerName()}" /></td>
-			<td><c:out value="${cover.getYoutubeUrl()}" /></td>		
-          </tr>
-          </c:forEach>
-        </tbody>
-      </table>
-	  
 
       <!-- Comments -->
       <br/>
@@ -283,8 +261,33 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 	   		<h3 style="color:#74ae14"><i>No comments on this song yet, you can be the first one!</i></h3>
 	   </c:if>
 	   
+	   <!-- Covers -->
+	   <br/>
+      <h1>Covers List</h1>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Cover Name</th>
+            <th scope="col">Performer</th>
+            <th scope="col">YoutubeUrl</th>
+          </tr>
+        </thead>
+        <% System.out.println(request.getAttribute("covers")); %>
+        <tbody>
+          <c:forEach items="${covers}" var="cover" >
+          <tr>
+			<td><c:out value="${cover.getCoverName()}" /></td>
+			<td><c:out value="${cover.getPerformerName()}" /></td>
+			<td><a href="${cover.getYoutubeUrl()}"><c:out value="${cover.getYoutubeUrl()}" /></a></td>		
+          </tr>
+          </c:forEach>
+        </tbody>
+      </table>
+	   
     </div>
 
+
+ 
 
     <div
       class="modal fade"
