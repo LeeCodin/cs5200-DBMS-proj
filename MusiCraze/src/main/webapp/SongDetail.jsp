@@ -170,8 +170,31 @@ contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 		  </div>
 	  </div>
 	  
+	  
+      <!-- Covers -->
+      <h1>Covers List</h1>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Cover Name</th>
+            <th scope="col">Performer</th>
+            <th scope="col">YoutubeUrl</th>
+          </tr>
+        </thead>
+        <tbody>
+          <c:forEach items="${covers}" var="cover" >
+          <tr>
+			<td><c:out value="${cover.getCoverName()}" /></td>
+			<td><c:out value="${cover.getPerformerName()}" /></td>
+			<td><c:out value="${cover.getYoutubeUrl()}" /></td>		
+          </tr>
+          </c:forEach>
+        </tbody>
+      </table>
+	  
 
       <!-- Comments -->
+      <br/>
       <h1>Comments</h1>
       <h3>Create a comment for this song:</h3>
       <form method="post">
