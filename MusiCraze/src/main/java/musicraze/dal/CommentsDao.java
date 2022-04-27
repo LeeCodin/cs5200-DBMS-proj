@@ -104,7 +104,7 @@ public class CommentsDao {
                 String userName = results.getString("UserName");
                 int songId = results.getInt("SongId");
                 String content = results.getString("Content");
-                Date createdAt = results.getDate("CreatedAt");
+                java.util.Date createdAt = results.getTimestamp("CreatedAt");
 
                 Users user = UsersDao.getInstance().getUserByUserName(userName);
                 Songs song = SongsDao.getInstance().getSongById(songId);
@@ -152,7 +152,7 @@ public class CommentsDao {
                 String resultUserName = results.getString("UserName");
                 int songId = results.getInt("SongId");
                 String content = results.getString("Content");
-                java.util.Date createdAt = results.getDate("CreatedAt");
+                java.util.Date createdAt = results.getTimestamp("CreatedAt");
 
                 Users user = UsersDao.getInstance().getUserByUserName(resultUserName);
                 Songs song = SongsDao.getInstance().getSongById(songId);
@@ -202,7 +202,7 @@ public class CommentsDao {
                 String userName = results.getString("UserName");
                 int songId = results.getInt("SongId");
                 String content = results.getString("Content");
-                java.util.Date createdAt = results.getDate("CreatedAt");
+                java.util.Date createdAt = results.getTimestamp("CreatedAt");
 
                 Users user = UsersDao.getInstance().getUserByUserName(userName);
                 Songs song = SongsDao.getInstance().getSongById(songId);
@@ -326,7 +326,7 @@ public class CommentsDao {
     
     /**
      * Delete this comment
-     * @param comment
+     * @param
      * @return
      * @throws SQLException
      */
