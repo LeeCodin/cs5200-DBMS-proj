@@ -26,12 +26,14 @@ public class SongGet extends HttpServlet {
 	protected LikesDao likesDao;
 	protected PlaylistsDao playlistsDao;
 	protected PlaylistSongContainsDao playlistSongContainsDao;
+	protected CoversDao coversDao;
 	protected Users user;
     protected Songs song;
     protected List<Comments> comments;
     protected List<Comments> usersComments;
     protected List<Likes> likes;
     protected List<Playlists> playlists;
+    protected List<Covers> coverslist;
     private boolean liked = false;
 
 	@Override
@@ -41,6 +43,7 @@ public class SongGet extends HttpServlet {
 		likesDao = LikesDao.getInstance();
 		playlistsDao = PlaylistsDao.getInstance();
 		playlistSongContainsDao = PlaylistSongContainsDao.getInstance();
+		coversDao = CoversDao.getInstance();
 	}
 	
 	@Override
@@ -68,6 +71,7 @@ public class SongGet extends HttpServlet {
         usersComments = new ArrayList<>();
         likes = new ArrayList<>();
         playlists = new ArrayList<Playlists>();
+        coverslist = new ArrayList<Covers>();
         
         
         // Retrieve and validate name.
@@ -83,6 +87,7 @@ public class SongGet extends HttpServlet {
              	comments = commentsDao.getCommentsBySongId(Integer.valueOf(songId));
              	likes = likesDao.getLikesBySongId(Integer.valueOf(songId));
              	playlists = playlistsDao.getPlaylistsForUser(user);
+             	coverslist = coversDao.getCoversBySongId(Integer.valueOf(songId));
                  // Sort comments by their dates.
                 Collections.sort(comments, new Comparator<Comments>() {
                     @Override
@@ -123,6 +128,7 @@ public class SongGet extends HttpServlet {
         req.setAttribute("likesCounts", likes.size());
         req.setAttribute("liked", liked);
         req.setAttribute("playlists", playlists);
+        req.setAttribute("covers", coverslist);
 		
 	}
 	
