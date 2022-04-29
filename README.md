@@ -30,3 +30,11 @@ git push -u origin new-branch-name
 git branch -d featurebranchname
 git fetch --all --prune
 ```
+
+
+## How to Demo:
+1. Run the SQL script that sets up the database, creates the tables and loads data from CSV. File directory: https://github.com/SplashCrBy/CS5200_GROUP/blob/main/script/buildAll.sql
+
+2. Run the SQL script that inserts demo data: ./FinalDemoInsert.sql
+
+3. Start Tomcat server from Eclipse and go to "http://localhost:8080/MusiCraze/".
